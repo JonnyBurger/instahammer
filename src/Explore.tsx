@@ -12,7 +12,7 @@ import styled from 'styled-components'
 import { headerStyle } from './style'
 import { IconButton } from './IconButton'
 import { SULZER, BACKGROUND } from './colors'
-import { AppState, selectPosts, login } from './redux'
+import { AppState, selectPosts } from './redux'
 import { connect } from 'react-redux'
 import { Post } from './types'
 import { Option, none } from 'fp-ts/lib/Option'
@@ -40,6 +40,7 @@ const PostTitle = styled(Text)`
 type Props = {
   posts: Option<Post[]>
   login: (props: { username: string; password: string }) => void
+  logout: () => void
 }
 
 class Explore extends React.Component<Props> {
@@ -47,6 +48,9 @@ class Explore extends React.Component<Props> {
     return {
       ...headerStyle,
       title: 'Explore',
+      leftRight: (
+        <IconButton source={require('./info.png')} onPress={() => {}} />
+      ),
       headerRight: (
         <IconButton source={require('./plus.png')} onPress={() => {}} />
       ),
@@ -64,17 +68,6 @@ class Explore extends React.Component<Props> {
     return (
       <Container>
         <StatusBar barStyle="light-content" />
-        <Button
-          onPress={() =>
-            this.props.login({
-              username: 'lukaszirngibl',
-              password: 'EiBd89zukn?',
-            })
-          }
-          title="Login"
-        >
-          Login
-        </Button>
         {posts.fold(
           <LoadingWrapper>
             <ActivityIndicator size="large" />
@@ -92,11 +85,8 @@ class Explore extends React.Component<Props> {
   }
 }
 
-const Connected = connect(
-  (state: AppState) => ({
-    posts: selectPosts(state),
-  }),
-  { login },
-)(Explore)
+const Connected = connect((state: AppState) => ({
+  posts: selectPosts(state),
+}))(Explore)
 
 export { Connected as Explore }

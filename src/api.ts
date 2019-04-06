@@ -1,5 +1,6 @@
 import { Config } from '../config'
 import { wait } from './util'
+import axios from 'axios'
 
 export const apiTypeBuilder = (type: string) => ({
   request: `${type}/REQUEST`,
@@ -13,52 +14,26 @@ const makeApiRequest = async ({
   body,
   headers,
   formData,
+  hasCredentials = false,
 }: {
   method: string
   endpoint: string
   body?: object
   headers?: any
   formData?: any
-}) => {
-  const defaultHeaders = {
-    'Content-Type': 'application/json',
-  }
-
-  let options: RequestInit = {
+  hasCredentials?: boolean
+}) =>
+  axios({
+    headers: headers || {
+      'Content-Type': 'application/json',
+    },
     method,
-    headers: headers || defaultHeaders,
-  }
-
-  if (body !== undefined) {
-    options = {
-      ...options,
-      body: JSON.stringify(body),
-    }
-  } else if (formData !== undefined) {
-    options = {
-      ...options,
-      body: formData,
-    }
-  }
-  if (endpoint.startsWith('https')) {
-    console.log(options)
-    return fetch(endpoint, options)
-  }
-  return fetch(`${Config!.SERVER}/api${endpoint}`, options)
-}
-
-const tryGetJson = async (resp: any) => {
-  return new Promise(resolve => {
-    if (resp) {
-      resp
-        .json()
-        .then((json: object) => resolve(json))
-        .catch(() => resolve())
-    } else {
-      resolve()
-    }
-  })
-}
+    url: endpoint.startsWith('https')
+      ? endpoint
+      : `${Config!.SERVER}/api${endpoint}`,
+    data: JSON.stringify(body),
+    withCredentials: hasCredentials ? 'include' : 'omit',
+  } as any)
 
 type ApiType = {
   request: string
@@ -75,6 +50,7 @@ export const callApi = ({
   formData,
   headers,
   timeout,
+  hasCredentials,
 }: {
   type: ApiType
   method: string
@@ -84,6 +60,7 @@ export const callApi = ({
   headers?: any
   timeout?: number
   endpoint: string
+  hasCredentials?: boolean
 }) => async (dispatch: any) => {
   if (timeout) {
     await wait(timeout)
@@ -91,15 +68,18 @@ export const callApi = ({
 
   dispatch({ type: type.request, payload: { body, method, endpoint }, meta })
 
-  const res = await makeApiRequest({
+  const json = await makeApiRequest({
     method,
     endpoint,
     body,
     headers,
     formData,
+    hasCredentials,
   })
-  const json = await tryGetJson(res)
-  if (res.status !== 200) {
+
+  // console.log(json)
+
+  if (json.status !== 200) {
     const failureAction = { type: type.failure, payload: json, meta }
     if (dispatch) {
       dispatch(failureAction)
@@ -107,7 +87,7 @@ export const callApi = ({
     return failureAction
   }
 
-  const successAction = { type: type.success, payload: json, meta, raw: res }
+  const successAction = { type: type.success, payload: json, meta }
   if (dispatch) {
     dispatch(successAction)
   }

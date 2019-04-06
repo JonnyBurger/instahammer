@@ -9,16 +9,23 @@
   },
   "dependencies": {
     "@types/react-redux": "7.0.6",
+    "@types/redux-saga": "0.10.5",
     "@types/remote-redux-devtools": "0.5.3",
     "@types/reselect": "2.2.0",
     "@types/uuid": "3.4.4",
+    "axios": "0.18.0",
     "expo": "^32.0.0",
     "fp-ts": "1.15.1",
+    "jssoup": "0.0.10",
+    "node-fetch": "2.3.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-cheerio": "1.0.0-rc.4",
+    "react-native-cookie": "0.2.0",
     "react-navigation": "3.6.1",
     "react-redux": "6.0.1",
     "redux": "4.0.1",
+    "redux-saga": "1.0.2",
     "redux-thunk": "2.3.0",
     "reselect": "4.0.0",
     "styled-components": "^4.2.0",
@@ -26,6 +33,7 @@
     "uuid": "3.3.2"
   },
   "devDependencies": {
+    "@types/axios": "0.14.0",
     "@types/expo": "^32.0.9",
     "@types/react": "^16.8.12",
     "@types/react-native": "^0.57.42",
@@ -33,11 +41,11 @@
     "@types/styled-components": "^4.1.13",
     "expo-cli": "2.14.0",
     "patch-package": "^5.1.1",
+    "remote-redux-devtools": "0.5.16",
+    "remotedev-rn-debugger": "0.8.3",
     "tslint": "5.13.1",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.2.1",
-    "remote-redux-devtools": "0.5.16",
-    "remotedev-rn-debugger": "0.8.3"
+    "typescript": "^3.2.1"
   },
   "private": true
 }

@@ -1,3 +1,9 @@
+export enum AuthenticationStateType {
+  Authenticated = 'Authenticated',
+  Unauthenticated = 'Unauthenticated',
+  Initializing = 'Initializing',
+}
+
 export type ImageTag = {
   text: string
   pos: {
