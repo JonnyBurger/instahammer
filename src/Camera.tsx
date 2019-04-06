@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Text,
+  Alert,
   TouchableWithoutFeedback,
 } from 'react-native'
 import { Camera, Permissions } from 'expo'
@@ -22,6 +23,7 @@ import { SheetHeader } from './SheetHeader'
 const { height, width } = Dimensions.get('window')
 
 const screenHeight = height - 100
+export const fillRatio = screenHeight / height
 const aspectRatio = height / width
 const previewHeight = 130
 const padding = 30
@@ -73,7 +75,11 @@ class CameraView extends React.Component {
       <TouchableWithoutFeedback
         onPress={() => {
           // @ts-ignore
-          this.bottomSheet.snapTo(0)
+          if (lastPosition > 0.5) {
+            this.bottomSheet.snapTo(0)
+          } else {
+            this.bottomSheet.snapTo(1)
+          }
         }}
         style={{
           height: previewHeight,
@@ -91,11 +97,16 @@ class CameraView extends React.Component {
         >
           {this.state.resultLoaded ? (
             <SheetHeader
+              position={this.snapPosition}
               onCancel={() => {
                 this.bottomSheet.snapTo(2)
               }}
               onMoveDown={() => {
-                this.bottomSheet.snapTo(0)
+                if (lastPosition > 0.5) {
+                  this.bottomSheet.snapTo(0)
+                } else {
+                  this.bottomSheet.snapTo(1)
+                }
               }}
             />
           ) : null}
@@ -193,10 +204,26 @@ class CameraView extends React.Component {
           {() =>
             Animated.block([
               Animated.call([this.snapPosition], ([position]) => {
-                if (position > 0.98 && lastPosition <= 0.98) {
-                  this.setState({
-                    image: null,
-                  })
+                if (
+                  position > 0.98 &&
+                  lastPosition <= 0.98 &&
+                  lastPosition !== null
+                ) {
+                  const options = [
+                    {
+                      text: 'No',
+                      onPress: () => {
+                        this.bottomSheet.snapTo(1)
+                      },
+                    },
+                    {
+                      text: 'Yes',
+                      onPress: () => {
+                        this.setState({ image: null })
+                      },
+                    },
+                  ]
+                  Alert.alert('Do you want to discard the photo?', '', options)
                 }
                 if (position < 0.01 && lastPosition >= 0.01) {
                   this.form.trigger()

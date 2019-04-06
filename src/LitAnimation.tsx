@@ -88,7 +88,7 @@ export class LitAnimation extends React.Component<{
 
   render() {
     return (
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', height: 35 }}>
         {this.state.loaded ? (
           <LitIcon delay={this.props.delay} type={this.props.type} />
         ) : (
