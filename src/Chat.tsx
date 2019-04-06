@@ -107,7 +107,7 @@ class Chat extends React.Component<Props> {
           source={require('../assets/chevron.png')}
           onPress={() => props.navigation.goBack()}
           rotate={180}
-          iconStyle={{ marginRight: 8 }}
+          iconStyle={{ marginRight: -12 }}
         />
       ),
     }
