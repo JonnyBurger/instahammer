@@ -15,6 +15,7 @@ import {
   setAuthChecked,
   login,
   selectAuthenticationState,
+  setName,
 } from './redux'
 import { DataAsync } from './DataSync'
 import { AsyncStorage, View } from 'react-native'
@@ -70,16 +71,19 @@ const Authenticated = DataAsync(AuthenticatedNavigator)
 
 class UnconnectedAsyncLoader extends React.Component<{
   login: (props: { username: string; password: string }) => void
+  setName: (username: string) => void
   setAuthChecked: () => void
   authenticationState: AuthenticationStateType
 }> {
   componentDidMount() {
-    AsyncStorage.getItem(AUTH_DATA_PATH).then(auth => {
+    AsyncStorage.getItem(AUTH_DATA_PATH).then((auth: string | null) => {
       if (auth) {
-        this.props.login((JSON.parse(auth) as unknown) as {
-          username: string
-          password: string
-        })
+        this.props.setName(
+          ((JSON.parse(auth) as unknown) as {
+            username: string
+            password: string
+          }).username,
+        )
       } else {
         this.props.setAuthChecked()
       }
@@ -107,7 +111,7 @@ const AsyncLoader = connect(
   (state: AppState) => ({
     authenticationState: selectAuthenticationState(state),
   }),
-  { setAuthChecked, login },
+  { setAuthChecked, login, setName },
 )(UnconnectedAsyncLoader)
 
 export class Entry extends React.Component<{}, { fontLoaded: boolean }> {
