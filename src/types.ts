@@ -14,6 +14,14 @@ export type ImageTag = {
 
 export type PostTag = string
 
+export type Comment = {
+  id: string
+  text: string
+  author: string
+  createdAt: string
+  postId: string
+}
+
 export type Post = {
   id: string
   imageTags: ImageTag[]
@@ -23,4 +31,5 @@ export type Post = {
   postTags: PostTag[]
   image: string
   isResolved: boolean
+  comments: Comment[]
 }

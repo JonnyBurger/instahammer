@@ -33,7 +33,7 @@ const PostTitle = styled(Text)`
 
 const PostDescription = styled(Text)`
   width: 100%;
-  padding: 16px 16px 8px 16px;
+  padding: 16px 16px 0px 16px;
   font-size: 14px;
   height: 84px;
   overflow: hidden;
@@ -54,16 +54,15 @@ const PostTag = styled(Text)`
   margin: 2px;
 `
 
-const StatusWrapper = styled(View)`
-  padding: 2px 4px;
-  background-color: #ccffb3;
-  margin-left: 8px;
-  border-radius: 4px;
+const PostImageWrapper = styled(View)`
+  width: 100%;
+  height: 144px;
+  overflow: hidden;
 `
 
-const StatusText = styled(Text)`
-  color: #226600;
-  font-size: 11px;
+const PostImage = styled(Image)`
+  width: 100%;
+  height: 312px;
 `
 
 const PostFooter = styled(View)`
@@ -105,6 +104,9 @@ export class Post extends React.Component<Props> {
           <View style={{ flex: 1 }} />
           <Avatar />
         </PostHeader>
+        <PostImageWrapper>
+          <PostImage source={{ uri: post.image }} />
+        </PostImageWrapper>
         <PostDescription>{post.description}</PostDescription>
         <PostTagsWrapper>
           {post.postTags.map((p, k) => (

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text, Image, ActivityIndicator } from 'react-native'
+import { View, Text, Image, ActivityIndicator, ScrollView } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 
@@ -11,16 +11,16 @@ import { Avatar } from './Avatar'
 import { IconButton } from './IconButton'
 import { Status } from './Status'
 
-const PostDetailWrapper = styled(View)`
+const PostDetailWrapper = styled(ScrollView)`
   border-radius: 8px;
   background-color: white;
-  margin: 8px;
-  padding: 16px;
+  padding: 0 16px;
 `
 
 const PostHeader = styled(View)`
   flex-direction: row;
   align-items: center;
+  margin-top: 16px;
 `
 
 const PostTitle = styled(Text)`
@@ -94,6 +94,23 @@ const PostTag = styled(Text)`
   margin: 2px 2px 2px 0;
 `
 
+const PostImageWrapper = styled(View)`
+  width: 100%;
+  height: 256px;
+  overflow: hidden;
+  margin-top: 24px;
+`
+
+const PostImage = styled(Image)`
+  width: 100%;
+  height: 312px;
+`
+
+const Spacer = styled(View)`
+  width: 100%;
+  height: 64px;
+`
+
 export type Props = {
   post: Option<PostType>
 }
@@ -102,12 +119,13 @@ class PostDetail extends React.Component<Props> {
   static navigationOptions = (props: any) => {
     return {
       ...headerStyle,
-      title: 'Post Detail',
+      title: 'Case',
       headerLeft: (
         <IconButton
           source={require('../assets/chevron.png')}
           onPress={() => props.navigation.goBack()}
           rotate={180}
+          iconStyle={{ marginLeft: -12 }}
         />
       ),
       headerRight: (
@@ -130,9 +148,11 @@ class PostDetail extends React.Component<Props> {
         <PostDetailWrapper>
           <PostHeader>
             <PostTitle>{detail.title}</PostTitle>
-            <Status resolved={detail.resolved} />
+            <Status resolved={detail.isResolved} />
           </PostHeader>
-
+          <PostImageWrapper>
+            <PostImage source={{ uri: detail.image }} />
+          </PostImageWrapper>
           <DataLabel>DESCRIPTION</DataLabel>
           <PostDescription>{detail.description}</PostDescription>
           <DataLabel>REPORTER</DataLabel>
@@ -150,6 +170,7 @@ class PostDetail extends React.Component<Props> {
               <PostTag key={k}>{p}</PostTag>
             ))}
           </PostTagsWrapper>
+          <Spacer />
         </PostDetailWrapper>
       ),
     )
