@@ -8,13 +8,14 @@
     "postinstall": "./node_modules/.bin/patch-package && remotedev-debugger --hostname localhost --port 5678 --injectserver"
   },
   "dependencies": {
-<<<<<<< HEAD
+    "@expo/vector-icons": "^10.0.1",
     "@types/react-redux": "7.0.6",
     "@types/redux-saga": "0.10.5",
     "@types/remote-redux-devtools": "0.5.3",
     "@types/reselect": "2.2.0",
     "@types/uuid": "3.4.4",
     "axios": "0.18.0",
+    "date-fns": "^2.0.0-alpha.27",
     "expo": "^32.0.0",
     "fp-ts": "1.15.1",
     "jssoup": "0.0.10",
@@ -25,6 +26,7 @@
     "react-native-cookie": "0.2.0",
     "react-navigation": "3.6.1",
     "react-redux": "6.0.1",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.8",
     "redux": "4.0.1",
     "redux-saga": "1.0.2",
     "redux-thunk": "2.3.0",
@@ -32,16 +34,6 @@
     "styled-components": "^4.2.0",
     "tslint-config-prettier": "1.18.0",
     "uuid": "3.3.2"
-=======
-    "@expo/vector-icons": "^10.0.1",
-    "date-fns": "^2.0.0-alpha.27",
-    "expo": "^32.0.0",
-    "polished": "^3.2.0",
-    "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "reanimated-bottom-sheet": "^1.0.0-alpha.8",
-    "styled-components": "^4.2.0"
->>>>>>> ed795d24d9fd19f72c1514b6d5057b90ff08c3f1
   },
   "devDependencies": {
     "@types/axios": "0.14.0",
