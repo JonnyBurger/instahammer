@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {Camera, Permissions} from 'expo';
 import SnapButton from './SnapButton';
+import {FocalPoint} from './FocalPoint';
 
 class CameraView extends React.Component {
 	state = {
@@ -21,6 +22,15 @@ class CameraView extends React.Component {
 							flex: 1
 						}}
 					/>
+					<View
+						style={{
+							...StyleSheet.absoluteFillObject,
+							justifyContent: 'center',
+							alignItems: 'center'
+						}}
+					>
+						<FocalPoint />
+					</View>
 					<View style={{flexDirection: 'row', justifyContent: 'center'}}>
 						<SnapButton />
 					</View>
