@@ -71,7 +71,8 @@ const CommentTextWrapper = styled(View)`
 const CommentText = styled(Text)``
 
 const AddCommentWrapper = styled(View)`
-  flex: 0 0 72px;
+  flex-basis: 72;
+  flex-shrink: 0;
   width: 100%;
   background-color: #cfd7e2;
   border-top-width: 1px;
@@ -107,7 +108,7 @@ class Chat extends React.Component<Props> {
           source={require('../assets/chevron.png')}
           onPress={() => props.navigation.goBack()}
           rotate={180}
-          iconStyle={{ marginRight: -12 }}
+          iconStyle={{ marginLeft: -12 }}
         />
       ),
     }
@@ -135,7 +136,7 @@ class Chat extends React.Component<Props> {
   render() {
     const { comments } = this.props
     return (
-      <ChatWrapper behavior="padding">
+      <ChatWrapper behavior="height">
         <CommentsWrapper>
           {comments.map(this.renderComment)}
           <EmptyRow />

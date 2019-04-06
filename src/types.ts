@@ -32,4 +32,5 @@ export type Post = {
   image: string
   isResolved: boolean
   comments: Comment[]
+  visionTags: string[]
 }

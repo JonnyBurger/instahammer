@@ -29,7 +29,12 @@ const Container = styled(View)`
   flex: 1;
   background-color: ${BACKGROUND};
   width: 100%;
-  padding: 8px 16px;
+  padding: 8px 0;
+`
+
+const PostsWrapper = styled(View)`
+  width: 100%;
+  padding: 0 16px;
 `
 
 const SearchInput = styled(TextInput)`
@@ -103,18 +108,20 @@ class Explore extends React.Component<Props> {
             onChangeText={debounce(this.props.setSearchText, 500)}
           />
         </SearchWrapper>
-        {posts.fold(
-          <LoadingWrapper>
-            <ActivityIndicator size="large" />
-          </LoadingWrapper>,
-          p => (
-            <FlatList
-              data={p}
-              keyExtractor={(item, index) => String(index)}
-              renderItem={({ item }) => this.renderPostItem(item)}
-            />
-          ),
-        )}
+        <PostsWrapper>
+          {posts.fold(
+            <LoadingWrapper>
+              <ActivityIndicator size="large" />
+            </LoadingWrapper>,
+            p => (
+              <FlatList
+                data={p}
+                keyExtractor={(item, index) => String(index)}
+                renderItem={({ item }) => this.renderPostItem(item)}
+              />
+            ),
+          )}
+        </PostsWrapper>
       </Container>
     )
   }

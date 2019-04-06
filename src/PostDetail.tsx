@@ -80,7 +80,7 @@ const ReputationNumber = styled(Text)`
   opacity: 0.7;
 `
 const PostTagsWrapper = styled(View)`
-  padding: 8px;
+  padding: 0 8px;
   width: 100%;
   flex-wrap: wrap;
   flex-direction: row;
@@ -89,6 +89,15 @@ const PostTagsWrapper = styled(View)`
 const PostTag = styled(Text)`
   padding: 6px 8px;
   font-weight: bold;
+  font-size: 14px;
+  background-color: #e8e8e8;
+  margin: 2px 2px 2px 0;
+`
+
+const VisionTag = styled(Text)`
+  padding: 6px 8px;
+  font-weight: normal;
+  font-style: italic;
   font-size: 14px;
   background-color: #e8e8e8;
   margin: 2px 2px 2px 0;
@@ -169,6 +178,14 @@ class PostDetail extends React.Component<Props> {
             {detail.postTags.map((p, k) => (
               <PostTag key={k}>{p}</PostTag>
             ))}
+          </PostTagsWrapper>
+          <DataLabel>VISION TAGS</DataLabel>
+          <PostTagsWrapper>
+            {detail.visionTags
+              .filter(v => v!!)
+              .map((p, k) => (
+                <VisionTag key={k}>{p}</VisionTag>
+              ))}
           </PostTagsWrapper>
           <Spacer />
         </PostDetailWrapper>
