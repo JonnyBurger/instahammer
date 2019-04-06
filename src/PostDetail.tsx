@@ -179,14 +179,6 @@ class PostDetail extends React.Component<Props> {
               <PostTag key={k}>{p}</PostTag>
             ))}
           </PostTagsWrapper>
-          <DataLabel>VISION TAGS</DataLabel>
-          <PostTagsWrapper>
-            {detail.visionTags
-              .filter(v => v!!)
-              .map((p, k) => (
-                <VisionTag key={k}>{p}</VisionTag>
-              ))}
-          </PostTagsWrapper>
           <Spacer />
         </PostDetailWrapper>
       ),
