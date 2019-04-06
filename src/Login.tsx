@@ -1,12 +1,19 @@
 import * as React from 'react'
-import { View, StatusBar, Image, TextInput, Text } from 'react-native'
+import {
+  View,
+  StatusBar,
+  Image,
+  TextInput,
+  Text,
+  KeyboardAvoidingView,
+} from 'react-native'
 import styled from 'styled-components'
 import { headerStyle } from './style'
 import { connect } from 'react-redux'
 import { AppState, login, selectIsLogginIn } from './redux'
 import { Button } from './Button'
 
-const LoginWrapper = styled(View)`
+const LoginWrapper = styled(KeyboardAvoidingView)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,6 +38,7 @@ const Content = styled(View)`
   width: 100%;
   margin: auto;
   align-items: center;
+  min-width: 312px;
 `
 
 const LoginInput = styled(TextInput)`
@@ -76,7 +84,7 @@ class Login extends React.Component<
 
   render() {
     return (
-      <LoginWrapper>
+      <LoginWrapper behavior="position">
         <StatusBar barStyle="light-content" />
         <Content>
           <AppLogo source={require('./hammer.png')} />
