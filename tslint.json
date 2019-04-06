@@ -1,11 +1,33 @@
 {
-  "extends": [
-    "tslint:recommended",
-    "tslint-config-airbnb"
-  ],
+  "extends": ["tslint:latest", "tslint-config-prettier"],
+  "defaultSeverity": "error",
+  "linterOptions": {
+    "exclude": []
+  },
   "rules": {
-    "no-any": true,
-    "prefer-array-literal": [true, { "allow-type-parameters": true }],
-    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"]
+    "no-any": false,
+    "array-type": false,
+    "interface-name": false,
+    "interface-over-type-literal": false,
+    "member-access": [true, "no-public"],
+    "member-ordering": false,
+    "max-classes-per-file": false,
+    "curly": true,
+    "jsdoc-format": false,
+    "no-bitwise": true,
+    "no-conditional-assignment": true,
+    "no-console": true,
+    "no-empty": false,
+    "no-implicit-dependencies": false,
+    "no-shadowed-variable": true,
+    "no-submodule-imports": false,
+    "no-unused-expression": false,
+    "no-object-literal-type-assertion": false,
+    "object-literal-sort-keys": false,
+    "one-variable-per-declaration": false,
+    "ordered-imports": false,
+    "radix": false,
+    "triple-equals": true,
+    "variable-name": false
   }
 }
