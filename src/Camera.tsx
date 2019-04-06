@@ -1,18 +1,38 @@
 import React from 'react';
-import {View, StyleSheet, Image, Dimensions} from 'react-native';
+import {
+	View,
+	StyleSheet,
+	Image,
+	Dimensions,
+	TouchableOpacity,
+	ActivityIndicator,
+	Text,
+	TouchableWithoutFeedback
+} from 'react-native';
 import {Camera, Permissions} from 'expo';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
 import SnapButton from './SnapButton';
 import {FocalPoint} from './FocalPoint';
-import {Results} from './Result';
 import {Flash} from './Flash';
+import {CancelButton} from './CancelButton';
 
 const {height, width} = Dimensions.get('window');
+
+const screenHeight = height - 100;
+const aspectRatio = height / width;
+const previewHeight = 200;
+const padding = 30;
+const thumbnailHeight = previewHeight - padding;
+
+let lastPosition = null;
 
 class CameraView extends React.Component {
 	state = {
 		type: Camera.Constants.Type.back,
 		hasCameraPermission: null,
-		image: null
+		image: null,
+		resultLoaded: false
 	};
 	async componentDidMount() {
 		const {status} = await Permissions.askAsync(Permissions.CAMERA);
@@ -21,11 +41,74 @@ class CameraView extends React.Component {
 	ref: React.Ref<Results> | null = null;
 	flash: React.Ref<Flash> | null = null;
 	camera: React.Ref<Camera> | null = null;
+	contentPosition = new Animated.Value(0);
+	bottomSheet: React.Ref<BottomSheet> | null = null;
+	snapPosition = new Animated.Value(1);
+	renderInner = () => {
+		return (
+			<TouchableWithoutFeedback onPress={() => {}}>
+				<View
+					style={{
+						height: screenHeight - previewHeight,
+						backgroundColor: 'white'
+					}}
+				/>
+			</TouchableWithoutFeedback>
+		);
+	};
+	renderHeader = () => {
+		return (
+			<TouchableWithoutFeedback
+				onPress={() => {
+					// @ts-ignore
+					this.bottomSheet.snapTo(0);
+				}}
+				style={{height: previewHeight}}
+			>
+				<View
+					style={{
+						height: previewHeight,
+						backgroundColor: 'white',
+						justifyContent: 'center'
+					}}
+				>
+					<TouchableOpacity
+						style={{position: 'absolute', right: 0, top: 0, padding: 16}}
+						onPress={() => {
+							// @ts-ignore
+							this.bottomSheet.snapTo(2);
+						}}
+					>
+						<CancelButton />
+					</TouchableOpacity>
+					{this.state.resultLoaded ? (
+						<View style={{flexDirection: 'row'}}>
+							<View style={{width: padding / 2}} />
+						</View>
+					) : (
+						<ActivityIndicator color="gray" />
+					)}
+				</View>
+			</TouchableWithoutFeedback>
+		);
+	};
 	render() {
 		return (
 			<View style={{flex: 1}}>
 				{this.state.image ? (
-					<View style={{flex: 1}}>
+					<Animated.View
+						style={{
+							flex: 1,
+							transform: [
+								{
+									translateY: Animated.sub(
+										Animated.multiply(screenHeight, this.snapPosition),
+										screenHeight
+									)
+								}
+							]
+						}}
+					>
 						<Image
 							source={{
 								uri: this.state.image
@@ -35,7 +118,7 @@ class CameraView extends React.Component {
 								width
 							}}
 						/>
-					</View>
+					</Animated.View>
 				) : (
 					<Camera
 						style={{flex: 1}}
@@ -73,8 +156,13 @@ class CameraView extends React.Component {
 											});
 											setTimeout(() => {
 												// @ts-ignore
-												this.ref.didClick();
-											}, 500);
+												this.bottomSheet.snapTo(1);
+												setTimeout(() => {
+													this.setState({
+														resultLoaded: true
+													});
+												}, 2000);
+											}, 1000);
 										});
 									this.flash.flash();
 								}}
@@ -89,16 +177,31 @@ class CameraView extends React.Component {
 						/>
 					</Camera>
 				)}
-				<Results
-					onCancel={() => {
-						this.setState({
-							image: null
-						});
-					}}
+				<Animated.Code>
+					{() =>
+						Animated.block([
+							Animated.call([this.snapPosition], ([position]) => {
+								if (position > 0.98 && lastPosition <= 0.98) {
+									this.setState({
+										image: null
+									});
+								}
+								lastPosition = position;
+							})
+						])
+					}
+				</Animated.Code>
+				<BottomSheet
 					ref={ref => {
 						// @ts-ignore
-						this.ref = ref;
+						this.bottomSheet = ref;
 					}}
+					overdragResistanceFactor={1}
+					callbackNode={this.snapPosition}
+					snapPoints={[screenHeight, previewHeight, 0]}
+					initialSnap={2}
+					renderContent={this.renderInner}
+					renderHeader={this.renderHeader}
 				/>
 			</View>
 		);
