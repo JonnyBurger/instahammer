@@ -38,6 +38,7 @@ class CameraView extends React.Component {
     image: null,
     resultLoaded: false,
     showForm: false,
+    base64: null,
   }
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
@@ -61,6 +62,7 @@ class CameraView extends React.Component {
         >
           <View style={{ flex: 1 }}>
             <Form
+              base64={this.state.base64}
               ref={form => {
                 this.form = form
               }}
@@ -174,10 +176,13 @@ class CameraView extends React.Component {
                   this.camera
                     .takePictureAsync({
                       quality: 0.5,
+                      base64: true,
                     })
                     .then(result => {
+                      console.log(result.base64.substr(0, 50))
                       this.setState({
                         image: result.uri,
+                        base64: `data:image/png;base64,${result.base64}`,
                       })
                       setTimeout(() => {
                         // @ts-ignore

@@ -60,7 +60,7 @@ export class SheetHeader extends React.Component {
                 }}
                 height={30}
               >
-                Industrial Hammer
+                Water Bottle
               </LeftToRightReveal>
 
               <LeftToRightReveal

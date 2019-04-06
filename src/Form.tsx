@@ -45,7 +45,47 @@ export class Form extends React.Component {
           type="location"
         />
         <View style={{ height: 15 }} />
-        <Button label="Create report" />
+        <Button
+          label="Create report"
+          onPress={() => {
+            console.log(this.props.base64.substr(0, 40))
+            fetch(`http://instahammer.herokuapp.com/v1/posts`, {
+              method: 'post',
+              headers: {
+                'content-type': 'application/json',
+              },
+              body: JSON.stringify({
+                title: 'Engine failure',
+                description: 'yo',
+                location: {
+                  latitude: 47.5056,
+                  longitude: 8.7241,
+                },
+                author: 'jonny',
+                postTags: ['cruise', 'A1X070', 'engine'],
+                image: this.props.base64,
+                imageTags: [
+                  {
+                    text: 'corosion',
+                    pos: {
+                      x: 50,
+                      y: 30,
+                    },
+                  },
+                  {
+                    text: 'cracks',
+                    pos: {
+                      x: 40,
+                      y: 70,
+                    },
+                  },
+                ],
+              }),
+            })
+              .then(response => response.json())
+              .then(console.log)
+          }}
+        />
       </View>
     )
   }
