@@ -8,6 +8,7 @@
     "noUnusedParameters": true,
     "types": [
       "jest"
-    ]
+    ],
+    "allowSyntheticDefaultImports": true
   }
 }
