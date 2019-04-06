@@ -93,12 +93,12 @@ export class LitAnimation extends React.Component<{
 						position: 'absolute',
 						marginLeft: 40
 					}}
-				>
-					Loading
-				</Animated.Text>
+				/>
 				<Animated.Text
 					style={{
 						marginTop: 1,
+						fontFamily: 'frutiger',
+						fontSize: 16,
 						transform: [
 							{
 								translateY: this.animation.interpolate({
@@ -110,9 +110,14 @@ export class LitAnimation extends React.Component<{
 						opacity: this.animation
 					}}
 				>
-					{this.props.type === 'location'
-						? 'Winterthur, Switzerland'
-						: format(new Date(), 'iiii d.M.yyyy, HH:mm')}
+					{this.props.type === 'location' ? (
+						<Text>
+							<Text style={{fontFamily: 'frutiger-bold'}}>Winterthur</Text>{' '}
+							<Text style={{fontFamily: 'frutiger'}}>Switzerland</Text>
+						</Text>
+					) : (
+						format(new Date(), 'iiii d.M.yyyy, HH:mm')
+					)}
 				</Animated.Text>
 			</View>
 		);
