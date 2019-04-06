@@ -73,7 +73,7 @@ export class LitAnimation extends React.Component<{
     loaded: false,
   }
   animation = new Animated.Value(0)
-  componentDidMount() {
+  trigger() {
     setTimeout(() => {
       this.setState({
         loaded: true,
@@ -129,7 +129,12 @@ export class LitAnimation extends React.Component<{
               <Text style={{ fontFamily: 'frutiger' }}>Switzerland</Text>
             </Text>
           ) : (
-            format(new Date(), 'iiii d.M.yyyy, HH:mm')
+            <Text style={{ fontFamily: 'frutiger-bold' }}>
+              <Text>{format(new Date(), 'MMMM do')}</Text>{' '}
+              <Text style={{ fontFamily: 'frutiger' }}>
+                {format(new Date(), 'HH:mm')}
+              </Text>
+            </Text>
           )}
         </Animated.Text>
       </View>

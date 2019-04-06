@@ -13,21 +13,38 @@ const Title = styled(TextInput)`
 const Description = styled(TextInput)`
   font-family: 'frutiger';
   font-size: 20px;
-  height: 100px;
+  height: 50px;
 `
 export class Form extends React.Component {
+  trigger() {
+    this.anim1.trigger()
+    this.anim2.trigger()
+  }
   render() {
     return (
-      <View style={{ padding: 30 }}>
-        <View style={{ height: 25 }} />
+      <View style={{ padding: 20, flex: 1 }}>
+        <View style={{ height: 5 }} />
         <Title placeholder="Enter title" />
         <View style={{ height: 10 }} />
-        <Description placeholder="Describe your inquiry" multiline />
+        <Description placeholder="Describe your inquiry" />
         <View style={{ height: 25 }} />
-        <LitAnimation delay={0} type="time" />
+        <View style={{ flex: 1 }} />
+        <LitAnimation
+          ref={anim => {
+            this.anim1 = anim
+          }}
+          delay={0}
+          type="time"
+        />
         <View style={{ height: 10 }} />
-        <LitAnimation delay={500} type="location" />
-        <View style={{ height: 20 }} />
+        <LitAnimation
+          ref={anim => {
+            this.anim2 = anim
+          }}
+          delay={1000}
+          type="location"
+        />
+        <View style={{ height: 10 }} />
         <Button label="Create report" />
       </View>
     )

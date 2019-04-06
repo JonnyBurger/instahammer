@@ -17,13 +17,13 @@ import { FocalPoint } from './FocalPoint'
 import { Flash } from './Flash'
 import { CancelButton } from './CancelButton'
 import { Form } from './Form'
-import { Button } from './Button'
+import { SheetHeader } from './SheetHeader'
 
 const { height, width } = Dimensions.get('window')
 
 const screenHeight = height - 100
 const aspectRatio = height / width
-const previewHeight = 150
+const previewHeight = 130
 const padding = 30
 const thumbnailHeight = previewHeight - padding
 
@@ -35,6 +35,7 @@ class CameraView extends React.Component {
     hasCameraPermission: null,
     image: null,
     resultLoaded: false,
+    showForm: false,
   }
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
@@ -45,6 +46,7 @@ class CameraView extends React.Component {
   camera: React.Ref<Camera> | null = null
   contentPosition = new Animated.Value(0)
   bottomSheet: React.Ref<BottomSheet> | null = null
+  form: React.Ref<Form> | null = null
   snapPosition = new Animated.Value(1)
   renderInner = () => {
     return (
@@ -55,13 +57,13 @@ class CameraView extends React.Component {
             width: '100%',
           }}
         >
-          {this.state.resultLoaded ? (
-            <View style={{ flex: 1 }}>
-              <Form />
-            </View>
-          ) : (
-            <ActivityIndicator color="gray" />
-          )}
+          <View style={{ flex: 1 }}>
+            <Form
+              ref={form => {
+                this.form = form
+              }}
+            />
+          </View>
         </View>
       </TouchableWithoutFeedback>
     )
@@ -73,35 +75,30 @@ class CameraView extends React.Component {
           // @ts-ignore
           this.bottomSheet.snapTo(0)
         }}
-        style={{ height: previewHeight }}
+        style={{
+          height: previewHeight,
+        }}
       >
         <View
           style={{
+            flex: 1,
             height: previewHeight,
             backgroundColor: 'white',
             justifyContent: 'center',
+            borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+            borderBottomWidth: 1,
           }}
         >
-          <TouchableOpacity
-            style={{ position: 'absolute', right: 0, top: 0, padding: 16 }}
-            onPress={() => {
-              // @ts-ignore
-              this.bottomSheet.snapTo(2)
-            }}
-          >
-            <CancelButton />
-          </TouchableOpacity>
-          <View
-            style={{
-              flexDirection: 'row',
-              paddingLeft: 16,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Text>Recognized a hammer</Text>
-            <Button label="Create report" />
-          </View>
+          {this.state.resultLoaded ? (
+            <SheetHeader
+              onCancel={() => {
+                this.bottomSheet.snapTo(2)
+              }}
+              onMoveDown={() => {
+                this.bottomSheet.snapTo(0)
+              }}
+            />
+          ) : null}
         </View>
       </TouchableWithoutFeedback>
     )
@@ -159,6 +156,9 @@ class CameraView extends React.Component {
             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
               <SnapButton
                 onPress={() => {
+                  this.setState({
+                    resultLoaded: false,
+                  })
                   // @ts-ignore
                   this.camera
                     .takePictureAsync({
@@ -171,11 +171,9 @@ class CameraView extends React.Component {
                       setTimeout(() => {
                         // @ts-ignore
                         this.bottomSheet.snapTo(1)
-                        setTimeout(() => {
-                          this.setState({
-                            resultLoaded: true,
-                          })
-                        }, 2000)
+                        this.setState({
+                          resultLoaded: true,
+                        })
                       }, 1000)
                     })
                   this.flash.flash()
@@ -199,6 +197,9 @@ class CameraView extends React.Component {
                   this.setState({
                     image: null,
                   })
+                }
+                if (position < 0.01 && lastPosition >= 0.01) {
+                  this.form.trigger()
                 }
                 lastPosition = position
               }),
