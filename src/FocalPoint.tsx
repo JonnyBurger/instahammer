@@ -16,6 +16,7 @@ const Square = styled(View)<{
 	height: 14px;
 	width: 14px;
 	border-color: white;
+	border-radius: 2px;
 	border-left-width: ${props => (props.left ? 1 : 0)}px;
 	border-right-width: ${props => (props.right ? 1 : 0)}px;
 	border-top-width: ${props => (props.top ? 1 : 0)}px;

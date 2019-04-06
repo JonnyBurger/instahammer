@@ -1,4 +1,5 @@
 import React from 'react'
+import {Font, AppLoading} from 'expo';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import { Provider, connect } from 'react-redux'
 
@@ -12,9 +13,9 @@ import {
   selectAuthenticationState,
 } from './redux'
 import { DataAsync } from './DataSync'
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, View } from 'react-native'
 import { AuthenticationStateType } from './types'
-import { AppLoading } from 'expo'
+
 import { Login } from './Login'
 import { AUTH_DATA_PATH } from './constants'
 
@@ -85,8 +86,24 @@ const AsyncLoader = connect(
   { setAuthChecked, login },
 )(UnconnectedAsyncLoader)
 
-export class Entry extends React.Component {
+export class Entry extends React.Component<{}, { fontLoaded: boolean}> {
+
+  state = {
+		fontLoaded: false
+	};
+	async componentDidMount() {
+		await Font.loadAsync({
+			frutiger: require('../assets/frutiger.ttf'),
+			'frutiger-bold': require('../assets/Frutiger_bold.ttf')
+		});
+		this.setState({
+			fontLoaded: true
+		});
+	}
   render() {
+    if (!this.state.fontLoaded) {
+			return <View />;
+		}
     return (
       <Provider store={store}>
         <AsyncLoader />
