@@ -28,7 +28,8 @@ class CameraView extends React.Component {
 						style={{
 							...StyleSheet.absoluteFillObject,
 							justifyContent: 'center',
-							alignItems: 'center'
+							alignItems: 'center',
+							marginTop: -80
 						}}
 					>
 						<FocalPoint />

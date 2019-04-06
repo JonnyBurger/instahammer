@@ -3,7 +3,8 @@ import {
 	View,
 	Dimensions,
 	TouchableWithoutFeedback,
-	TouchableOpacity
+	TouchableOpacity,
+	ActivityIndicator
 } from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {CancelButton} from './CancelButton';
@@ -34,7 +35,14 @@ export class Results extends React.Component {
 				}}
 				style={{height: previewHeight}}
 			>
-				<View style={{height: previewHeight, backgroundColor: 'white'}}>
+				<View
+					style={{
+						height: previewHeight,
+						backgroundColor: 'white',
+						justifyContent: 'center',
+						alignItems: 'center'
+					}}
+				>
 					<TouchableOpacity
 						style={{position: 'absolute', right: 0, top: 0, padding: 10}}
 						onPress={() => {
@@ -43,6 +51,7 @@ export class Results extends React.Component {
 					>
 						<CancelButton />
 					</TouchableOpacity>
+					<ActivityIndicator color="gray" />
 				</View>
 			</TouchableWithoutFeedback>
 		);
@@ -60,7 +69,7 @@ export class Results extends React.Component {
 					// @ts-ignore
 					this.ref = ref;
 				}}
-				snapPoints={[screenHeight, 150, 0]}
+				snapPoints={[screenHeight, previewHeight, 0]}
 				initialSnap={2}
 				renderContent={this.renderInner}
 				renderHeader={this.renderHeader}
