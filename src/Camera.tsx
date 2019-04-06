@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Camera, Permissions} from 'expo';
+import SnapButton from './SnapButton';
 
 class CameraView extends React.Component {
 	state = {
@@ -17,11 +18,13 @@ class CameraView extends React.Component {
 				<Camera style={{flex: 1}} type={this.state.type}>
 					<View
 						style={{
-							flex: 1,
-							backgroundColor: 'transparent',
-							flexDirection: 'row'
+							flex: 1
 						}}
 					/>
+					<View style={{flexDirection: 'row', justifyContent: 'center'}}>
+						<SnapButton />
+					</View>
+					<View style={{height: 30}} />
 				</Camera>
 			</View>
 		);
