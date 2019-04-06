@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Text,
+  Alert,
   TouchableWithoutFeedback,
 } from 'react-native'
 import { Camera, Permissions } from 'expo'
@@ -193,10 +194,26 @@ class CameraView extends React.Component {
           {() =>
             Animated.block([
               Animated.call([this.snapPosition], ([position]) => {
-                if (position > 0.98 && lastPosition <= 0.98) {
-                  this.setState({
-                    image: null,
-                  })
+                if (
+                  position > 0.98 &&
+                  lastPosition <= 0.98 &&
+                  lastPosition !== null
+                ) {
+                  const options = [
+                    {
+                      text: 'No',
+                      onPress: () => {
+                        this.bottomSheet.snapTo(1)
+                      },
+                    },
+                    {
+                      text: 'Yes',
+                      onPress: () => {
+                        this.setState({ image: null })
+                      },
+                    },
+                  ]
+                  Alert.alert('Do you want to discard the photo?', '', options)
                 }
                 if (position < 0.01 && lastPosition >= 0.01) {
                   this.form.trigger()
