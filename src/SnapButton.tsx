@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import {View} from 'react-native';
+import {View, TouchableWithoutFeedback} from 'react-native';
 import {SULZER} from './colors';
 
 const BUTTON_WIDTH = 70;
+
+const Touchable = styled(TouchableWithoutFeedback)``;
 
 const Outer = styled(View)`
 	border-radius: ${BUTTON_WIDTH / 2 + 7}px;
@@ -18,12 +20,16 @@ const Button = styled(View)`
 	background: rgba(255, 255, 255, 0.3);
 `;
 
-export default class extends React.Component {
+export default class extends React.Component<{
+	onPress: () => void;
+}> {
 	render() {
 		return (
-			<Outer>
-				<Button />
-			</Outer>
+			<Touchable {...this.props}>
+				<Outer>
+					<Button />
+				</Outer>
+			</Touchable>
 		);
 	}
 }
