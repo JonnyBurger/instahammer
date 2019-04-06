@@ -36,7 +36,7 @@ export class Form extends React.Component {
           delay={0}
           type="time"
         />
-        <View style={{ height: 10 }} />
+        <View style={{ height: 15 }} />
         <LitAnimation
           ref={anim => {
             this.anim2 = anim
@@ -44,7 +44,7 @@ export class Form extends React.Component {
           delay={1000}
           type="location"
         />
-        <View style={{ height: 10 }} />
+        <View style={{ height: 15 }} />
         <Button label="Create report" />
       </View>
     )
