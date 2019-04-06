@@ -31,6 +31,17 @@ const thumbnailHeight = previewHeight - padding
 
 let lastPosition = null
 
+const getVision = image =>
+  fetch(`http://instahammer.herokuapp.com/v1/vision`, {
+    method: 'post',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      image,
+    }),
+  }).then(response => response.json())
+
 class CameraView extends React.Component {
   state = {
     type: Camera.Constants.Type.back,
@@ -97,21 +108,20 @@ class CameraView extends React.Component {
             borderBottomWidth: 1,
           }}
         >
-          {this.state.resultLoaded ? (
-            <SheetHeader
-              position={this.snapPosition}
-              onCancel={() => {
-                this.bottomSheet.snapTo(2)
-              }}
-              onMoveDown={() => {
-                if (lastPosition > 0.5) {
-                  this.bottomSheet.snapTo(0)
-                } else {
-                  this.bottomSheet.snapTo(1)
-                }
-              }}
-            />
-          ) : null}
+          <SheetHeader
+            position={this.snapPosition}
+            result={this.state.resultLoaded}
+            onCancel={() => {
+              this.bottomSheet.snapTo(2)
+            }}
+            onMoveDown={() => {
+              if (lastPosition > 0.5) {
+                this.bottomSheet.snapTo(0)
+              } else {
+                this.bottomSheet.snapTo(1)
+              }
+            }}
+          />
         </View>
       </TouchableWithoutFeedback>
     )
@@ -179,18 +189,20 @@ class CameraView extends React.Component {
                       base64: true,
                     })
                     .then(result => {
-                      console.log(result.base64.substr(0, 50))
                       this.setState({
                         image: result.uri,
                         base64: `data:image/png;base64,${result.base64}`,
                       })
-                      setTimeout(() => {
-                        // @ts-ignore
-                        this.bottomSheet.snapTo(1)
-                        this.setState({
-                          resultLoaded: true,
-                        })
-                      }, 1000)
+                      // @ts-ignore
+                      this.bottomSheet.snapTo(1)
+                      getVision(`data:image/png;base64,${result.base64}`).then(
+                        result => {
+                          console.log(result)
+                          this.setState({
+                            resultLoaded: result,
+                          })
+                        },
+                      )
                     })
                   this.flash.flash()
                 }}

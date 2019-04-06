@@ -48,7 +48,6 @@ export class Form extends React.Component {
         <Button
           label="Create report"
           onPress={() => {
-            console.log(this.props.base64.substr(0, 40))
             fetch(`http://instahammer.herokuapp.com/v1/posts`, {
               method: 'post',
               headers: {
