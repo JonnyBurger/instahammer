@@ -24,6 +24,7 @@ import { InfoDrawer } from './InfoDrawer'
 import { Login } from './Login'
 import { AUTH_DATA_PATH } from './constants'
 import { PostDetail } from './PostDetail'
+import { Chat } from './Chat'
 
 const CameraNavigator = createStackNavigator(
   {
@@ -37,6 +38,7 @@ const CameraNavigator = createStackNavigator(
 
 const ExploreNavigator = createStackNavigator(
   {
+    Chat,
     Explore,
     PostDetail,
   },

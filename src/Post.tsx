@@ -33,7 +33,7 @@ const PostTitle = styled(Text)`
 
 const PostDescription = styled(Text)`
   width: 100%;
-  padding: 16px 16px 8px 16px;
+  padding: 16px 16px 0px 16px;
   font-size: 14px;
   height: 84px;
   overflow: hidden;

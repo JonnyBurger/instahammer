@@ -4,13 +4,14 @@ import { createSelector } from 'reselect'
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import * as devTools from 'remote-redux-devtools'
-import { Post, AuthenticationStateType } from './types'
+import { Post, AuthenticationStateType, Comment } from './types'
 import { some, none, Option, option } from 'fp-ts/lib/Option'
 import { callApi } from './api'
 import createSagaMiddleware from 'redux-saga'
 import { MainSaga } from './sagas'
 import { liftA2 } from 'fp-ts/lib/Apply'
-import { findFirst } from 'fp-ts/lib/Array'
+import { findFirst, sort } from 'fp-ts/lib/Array'
+import { Ord } from 'fp-ts/lib/Ord'
 
 // Actions
 
@@ -328,6 +329,19 @@ export const selectPostDetail = createSelector(
     liftA2(option)((postId: string) => (posts: Post[]) =>
       findFirst(posts, p => p.id === postId),
     )(postIdOption)(postsOption).chain(v => v),
+)
+
+const commentSetoid: Ord<Comment> = {
+  compare: (a, b) => (a.createdAt > b.createdAt ? 1 : -1),
+  equals: (a, b) => a.createdAt > b.createdAt,
+}
+
+export const selectPostComments = createSelector(
+  selectPostDetail,
+  detailOption =>
+    detailOption.fold([], detail =>
+      sort<Comment>(commentSetoid)(detail.comments),
+    ),
 )
 
 // Setup

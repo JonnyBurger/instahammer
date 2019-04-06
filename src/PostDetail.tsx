@@ -102,7 +102,7 @@ class PostDetail extends React.Component<Props> {
   static navigationOptions = (props: any) => {
     return {
       ...headerStyle,
-      title: 'Post Detail',
+      title: 'Case',
       headerLeft: (
         <IconButton
           source={require('../assets/chevron.png')}
