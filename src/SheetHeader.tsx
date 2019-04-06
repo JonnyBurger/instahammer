@@ -15,6 +15,7 @@ import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
 import { GRAY } from './colors'
 import { FadingAvatar } from './FadingAvatar'
 import Reanimated from 'react-native-reanimated'
+import { Experts } from './Experts'
 
 const { concat } = Reanimated
 
@@ -33,7 +34,7 @@ const OtherSuggestions = styled(ScrollView).attrs({
 
 const Tag = styled(TouchableOpacity)`
   background: ${GRAY};
-  padding: 4px;
+  padding: 6px;
   justify-content: center;
   align-items: center;
   margin-right: 6px;
@@ -66,7 +67,17 @@ export class SheetHeader extends React.Component {
         </Container>
       )
     }
-    const [mainResult, ...otherResult] = this.props.result
+    let otherResult = []
+    const [mainResult] = this.props.result.webTags
+    if (this.props.result.webTags.length > 1) {
+      otherResult.push(this.props.result.webTags[1])
+    }
+    if (this.props.result.textTags.length > 0) {
+      otherResult.push(this.props.result.textTags[0])
+    }
+    if (this.props.result.webTags.length > 2) {
+      otherResult.push(this.props.result.webTags[2])
+    }
     const term = this.state.selectedTerm || mainResult
     const alternativeTerms =
       !this.state.selectedTerm || this.state.selectedTerm === mainResult
@@ -94,33 +105,7 @@ export class SheetHeader extends React.Component {
             >
               {term}
             </LeftToRightReveal>
-
-            <LeftToRightReveal
-              style={{
-                fontSize: 16,
-                fontFamily: 'frutiger-bold',
-                color: 'rgba(0, 0, 0, 0.4)',
-              }}
-              height={30}
-              key={term + 'experts'}
-            >
-              6 experts may help{' '}
-            </LeftToRightReveal>
-            <FadingAvatar
-              left={135}
-              top={24}
-              source={require('../assets/guy1.jpg')}
-            />
-            <FadingAvatar
-              left={145}
-              top={24}
-              source={require('../assets/guy2.jpg')}
-            />
-            <FadingAvatar
-              left={155}
-              top={24}
-              source={require('../assets/guy3.jpg')}
-            />
+            <Experts term={term} />
           </View>
           <OtherSuggestions
             contentContainerStyle={{

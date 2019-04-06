@@ -161,6 +161,13 @@ class CameraView extends React.Component {
               this.camera = camera
             }}
           >
+            <View style={{ paddingTop: 50, paddingLeft: 20 }}>
+              <CancelButton
+                onPress={() => {
+                  this.props.navigation.goBack()
+                }}
+              />
+            </View>
             <View
               style={{
                 flex: 1,
