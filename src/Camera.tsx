@@ -23,6 +23,7 @@ import { SheetHeader } from './SheetHeader'
 const { height, width } = Dimensions.get('window')
 
 const screenHeight = height - 100
+export const fillRatio = screenHeight / height
 const aspectRatio = height / width
 const previewHeight = 130
 const padding = 30
@@ -74,7 +75,11 @@ class CameraView extends React.Component {
       <TouchableWithoutFeedback
         onPress={() => {
           // @ts-ignore
-          this.bottomSheet.snapTo(0)
+          if (lastPosition > 0.5) {
+            this.bottomSheet.snapTo(0)
+          } else {
+            this.bottomSheet.snapTo(1)
+          }
         }}
         style={{
           height: previewHeight,
@@ -92,11 +97,16 @@ class CameraView extends React.Component {
         >
           {this.state.resultLoaded ? (
             <SheetHeader
+              position={this.snapPosition}
               onCancel={() => {
                 this.bottomSheet.snapTo(2)
               }}
               onMoveDown={() => {
-                this.bottomSheet.snapTo(0)
+                if (lastPosition > 0.5) {
+                  this.bottomSheet.snapTo(0)
+                } else {
+                  this.bottomSheet.snapTo(1)
+                }
               }}
             />
           ) : null}

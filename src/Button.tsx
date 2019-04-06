@@ -40,7 +40,11 @@ export class Button extends React.Component<{
     return (
       <Container onPress={this.props.onPress} css={this.props.css}>
         <Inner gray={this.props.gray}>
-          <Label isLoading={this.props.isLoading}>{this.props.label}</Label>
+          {typeof this.props.label === 'string' ? (
+            <Label isLoading={this.props.isLoading}>{this.props.label}</Label>
+          ) : (
+            this.props.label
+          )}
           {this.props.isLoading && (
             <ActivityIndicator size="small" color="white" />
           )}
