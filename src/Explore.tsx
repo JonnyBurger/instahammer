@@ -48,11 +48,17 @@ class Explore extends React.Component<Props> {
     return {
       ...headerStyle,
       title: 'Explore',
-      leftRight: (
-        <IconButton source={require('./info.png')} onPress={() => {}} />
+      headerLeft: (
+        <IconButton
+          source={require('./info.png')}
+          onPress={() => props.navigation.openDrawer()}
+        />
       ),
       headerRight: (
-        <IconButton source={require('./plus.png')} onPress={() => {}} />
+        <IconButton
+          source={require('./plus.png')}
+          onPress={() => props.navigation.navigate('CameraNavigator')}
+        />
       ),
     }
   }

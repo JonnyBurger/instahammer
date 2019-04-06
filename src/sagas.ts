@@ -7,7 +7,7 @@ import { AUTH_DATA_PATH } from './constants'
 
 function* handleLoginParsing(action: LoginSuccess) {
   const $ = cheerio.load(action.payload.data)
-  const e = $('.my-homepage__username').text()
+  const e = ($('.my-homepage__username').text() || '').trim()
 
   if (e) {
     yield put(setName(e))
@@ -26,6 +26,15 @@ export function* LoginSaga() {
   )
 }
 
+const handleLogout = () => {
+  AsyncStorage.removeItem(AUTH_DATA_PATH)
+}
+
+export function* LogoutSaga() {
+  yield takeEvery((a: Action) => a.type === Actions.LOGOUT, handleLogout)
+}
+
 export function* MainSaga() {
+  yield fork(LogoutSaga)
   yield fork(LoginSaga)
 }

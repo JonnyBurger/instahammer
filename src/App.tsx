@@ -1,6 +1,10 @@
 import React from 'react'
-import {Font, AppLoading} from 'expo';
-import { createStackNavigator, createAppContainer } from 'react-navigation'
+import { Font, AppLoading } from 'expo'
+import {
+  createStackNavigator,
+  createAppContainer,
+  createDrawerNavigator,
+} from 'react-navigation'
 import { Provider, connect } from 'react-redux'
 
 import { Explore } from './Explore'
@@ -15,18 +19,38 @@ import {
 import { DataAsync } from './DataSync'
 import { AsyncStorage, View } from 'react-native'
 import { AuthenticationStateType } from './types'
-
+import { InfoDrawer } from './InfoDrawer'
 import { Login } from './Login'
 import { AUTH_DATA_PATH } from './constants'
 
+const CameraNavigator = createStackNavigator(
+  {
+    Camera,
+  },
+  {
+    initialRouteName: 'Camera',
+    headerMode: 'none',
+  },
+)
+
+const ExploreNavigator = createStackNavigator(
+  {
+    Explore,
+  },
+  {
+    initialRouteName: 'Explore',
+  },
+)
+
 const AuthenticatedNavigator = createAppContainer(
-  createStackNavigator(
+  createDrawerNavigator(
     {
-      Camera,
-      Explore,
+      CameraNavigator,
+      ExploreNavigator,
     },
     {
-      initialRouteName: 'Explore',
+      initialRouteName: 'ExploreNavigator',
+      contentComponent: InfoDrawer,
     },
   ),
 )
@@ -86,24 +110,23 @@ const AsyncLoader = connect(
   { setAuthChecked, login },
 )(UnconnectedAsyncLoader)
 
-export class Entry extends React.Component<{}, { fontLoaded: boolean}> {
-
+export class Entry extends React.Component<{}, { fontLoaded: boolean }> {
   state = {
-		fontLoaded: false
-	};
-	async componentDidMount() {
-		await Font.loadAsync({
-			frutiger: require('../assets/frutiger.ttf'),
-			'frutiger-bold': require('../assets/Frutiger_bold.ttf')
-		});
-		this.setState({
-			fontLoaded: true
-		});
-	}
+    fontLoaded: false,
+  }
+  async componentDidMount() {
+    await Font.loadAsync({
+      frutiger: require('../assets/frutiger.ttf'),
+      'frutiger-bold': require('../assets/Frutiger_bold.ttf'),
+    })
+    this.setState({
+      fontLoaded: true,
+    })
+  }
   render() {
     if (!this.state.fontLoaded) {
-			return <View />;
-		}
+      return <View />
+    }
     return (
       <Provider store={store}>
         <AsyncLoader />

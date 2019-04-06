@@ -98,13 +98,20 @@ export const login = ({
   })
 
 type DataAction = any
-type ViewAction = SetName | LoginFailure | SetAuthChecked
+type ViewAction =
+  | SetName
+  | LoginFailure
+  | SetAuthChecked
+  | Logout
+  | LoginSuccess
+  | LoginRequest
 
 // State
 
 type ViewState = {
   authName: Option<string>
   authChecked: boolean
+  isLoggingIn: boolean
 }
 
 type DataState = {
@@ -121,6 +128,7 @@ export type AppState = {
 export const initialViewState: ViewState = {
   authName: none,
   authChecked: false,
+  isLoggingIn: false,
 }
 
 export const viewReducer = (
@@ -128,6 +136,21 @@ export const viewReducer = (
   action: ViewAction,
 ): ViewState => {
   switch (action.type) {
+    case Actions.LOGIN_REQUEST:
+      return {
+        ...state,
+        isLoggingIn: true,
+      }
+    case Actions.LOGIN_SUCCESS:
+      return {
+        ...state,
+        isLoggingIn: false,
+      }
+    case Actions.LOGOUT:
+      return {
+        ...state,
+        authName: none,
+      }
     case Actions.SET_AUTH_CHECKED:
       return {
         ...state,
@@ -137,6 +160,7 @@ export const viewReducer = (
       return {
         ...state,
         authChecked: true,
+        isLoggingIn: false,
       }
     case Actions.SET_NAME:
       return {
@@ -183,6 +207,11 @@ const selectViewState = createSelector(
 export const selectName = createSelector(
   selectViewState,
   view => view.authName.getOrElse(''),
+)
+
+export const selectIsLogginIn = createSelector(
+  selectViewState,
+  view => view.isLoggingIn,
 )
 
 export const selectAuthenticationState = createSelector(
