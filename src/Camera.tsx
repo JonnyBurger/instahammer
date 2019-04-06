@@ -19,6 +19,8 @@ import { Flash } from './Flash'
 import { CancelButton } from './CancelButton'
 import { Form } from './Form'
 import { SheetHeader } from './SheetHeader'
+import { connect } from 'react-redux'
+import { AppState, Actions } from './redux'
 
 const { height, width } = Dimensions.get('window')
 
@@ -50,6 +52,7 @@ class CameraView extends React.Component {
     resultLoaded: false,
     showForm: false,
     base64: null,
+    selectedTerm: null,
   }
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
@@ -73,6 +76,10 @@ class CameraView extends React.Component {
         >
           <View style={{ flex: 1 }}>
             <Form
+              addPost={this.props.addPost}
+              navigation={this.props.navigation}
+              term={this.getResult().term}
+              alternativeTerms={this.getResult().alternativeTerms}
               base64={this.state.base64}
               ref={form => {
                 this.form = form
@@ -82,6 +89,36 @@ class CameraView extends React.Component {
         </View>
       </TouchableWithoutFeedback>
     )
+  }
+  getResult = () => {
+    if (!this.state.resultLoaded) {
+      return {
+        mainResult: [],
+        alternativeTerms: [],
+        term: null,
+      }
+    }
+    let otherResult = []
+    const [mainResult] = this.state.resultLoaded.webTags
+    if (this.state.resultLoaded.webTags.length > 1) {
+      otherResult.push(this.state.resultLoaded.webTags[1])
+    }
+    if (this.state.resultLoaded.textTags.length > 0) {
+      otherResult.push(this.state.resultLoaded.textTags[0])
+    }
+    if (this.state.resultLoaded.webTags.length > 2) {
+      otherResult.push(this.state.resultLoaded.webTags[2])
+    }
+    const term = this.state.selectedTerm || mainResult
+    const alternativeTerms =
+      !this.state.selectedTerm || this.state.selectedTerm === mainResult
+        ? otherResult
+        : [mainResult, ...otherResult]
+    return {
+      mainResult,
+      alternativeTerms,
+      term,
+    }
   }
   renderHeader = () => {
     return (
@@ -111,6 +148,13 @@ class CameraView extends React.Component {
           <SheetHeader
             position={this.snapPosition}
             result={this.state.resultLoaded}
+            alternativeTerms={this.getResult().alternativeTerms}
+            term={this.getResult().term}
+            selectTerm={r => {
+              this.setState({
+                selectedTerm: r,
+              })
+            }}
             onCancel={() => {
               this.bottomSheet.snapTo(2)
             }}
@@ -161,13 +205,6 @@ class CameraView extends React.Component {
               this.camera = camera
             }}
           >
-            <View style={{ paddingTop: 50, paddingLeft: 20 }}>
-              <CancelButton
-                onPress={() => {
-                  this.props.navigation.goBack()
-                }}
-              />
-            </View>
             <View
               style={{
                 flex: 1,
@@ -222,6 +259,22 @@ class CameraView extends React.Component {
                 this.flash = flash
               }}
             />
+            <View
+              style={{
+                paddingTop: 30,
+                paddingLeft: 20,
+                position: 'absolute',
+                zIndex: 3,
+                top: 0,
+                left: 0,
+              }}
+            >
+              <CancelButton
+                onPress={() => {
+                  this.props.navigation.navigate('Explore')
+                }}
+              />
+            </View>
           </Camera>
         )}
         <Animated.Code>
@@ -274,4 +327,13 @@ class CameraView extends React.Component {
   }
 }
 
-export default CameraView
+export default connect(
+  (state: AppState) => ({}),
+  dispatch => ({
+    addPost: post =>
+      dispatch({
+        type: Actions.POST_ADDED,
+        post,
+      }),
+  }),
+)(CameraView)

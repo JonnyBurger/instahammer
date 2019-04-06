@@ -56,7 +56,7 @@ export class SheetHeader extends React.Component {
       1,
     )
 
-    if (!this.props.result) {
+    if (!this.props.term) {
       return (
         <Container>
           <View
@@ -67,22 +67,6 @@ export class SheetHeader extends React.Component {
         </Container>
       )
     }
-    let otherResult = []
-    const [mainResult] = this.props.result.webTags
-    if (this.props.result.webTags.length > 1) {
-      otherResult.push(this.props.result.webTags[1])
-    }
-    if (this.props.result.textTags.length > 0) {
-      otherResult.push(this.props.result.textTags[0])
-    }
-    if (this.props.result.webTags.length > 2) {
-      otherResult.push(this.props.result.webTags[2])
-    }
-    const term = this.state.selectedTerm || mainResult
-    const alternativeTerms =
-      !this.state.selectedTerm || this.state.selectedTerm === mainResult
-        ? otherResult
-        : [mainResult, ...otherResult]
     return (
       <Container>
         <View
@@ -101,11 +85,11 @@ export class SheetHeader extends React.Component {
                 color: 'rgba(0, 0, 0, 0.9)',
               }}
               height={30}
-              key={term + 'title'}
+              key={this.props.term + 'title'}
             >
-              {term}
+              {this.props.term}
             </LeftToRightReveal>
-            <Experts term={term} />
+            <Experts term={this.props.term} />
           </View>
           <OtherSuggestions
             contentContainerStyle={{
@@ -115,13 +99,11 @@ export class SheetHeader extends React.Component {
           >
             <Text>Or:</Text>
             <View style={{ width: 8 }} />
-            {alternativeTerms.slice(0, 2).map(r => (
+            {this.props.alternativeTerms.slice(0, 2).map(r => (
               <Tag
                 key={r}
                 onPress={() => {
-                  this.setState({
-                    selectedTerm: r,
-                  })
+                  this.props.selectTerm(r)
                 }}
               >
                 <Text>{r}</Text>

@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { SULZER } from './colors'
 import { LitAnimation, Rotating } from './LitAnimation'
 import { Button } from './Button'
+import { Suggestions } from './Suggestions'
+import { withNavigation } from 'react-navigation'
 
 const Title = styled(TextInput)`
   font-size: 30px;
@@ -20,15 +22,32 @@ export class Form extends React.Component {
     this.anim1.trigger()
     this.anim2.trigger()
   }
+  state = {
+    description: '',
+    title: '',
+    sending: false,
+  }
   render() {
     return (
       <View style={{ padding: 20, flex: 1 }}>
         <View style={{ height: 5 }} />
-        <Title placeholder="Enter title" />
+        <Title placeholder="Enter title" value={this.state.title} />
         <View style={{ height: 10 }} />
-        <Description placeholder="Describe your inquiry" />
+        <Description
+          value={this.state.description}
+          placeholder={`Describe your inquiry about ${this.props.term}`}
+        />
         <View style={{ height: 25 }} />
         <View style={{ flex: 1 }} />
+        <Suggestions
+          term={this.props.term}
+          select={description => {
+            this.setState({
+              description: description,
+            })
+          }}
+        />
+        <View style={{ height: 10 }} />
         <LitAnimation
           ref={anim => {
             this.anim1 = anim
@@ -46,43 +65,41 @@ export class Form extends React.Component {
         />
         <View style={{ height: 15 }} />
         <Button
+          isLoading={this.state.sending}
           label="Create report"
           onPress={() => {
+            this.setState({
+              sending: true,
+            })
             fetch(`http://instahammer.herokuapp.com/v1/posts`, {
               method: 'post',
               headers: {
                 'content-type': 'application/json',
               },
               body: JSON.stringify({
-                title: 'Engine failure',
-                description: 'yo',
+                title: this.state.title || `Question about ${this.props.term}`,
+                description: this.state.description || ' ',
                 location: {
                   latitude: 47.5056,
                   longitude: 8.7241,
                 },
-                author: 'jonny',
-                postTags: ['cruise', 'A1X070', 'engine'],
+                author: 'Jonny Burger',
+                postTags: [this.props.term, ...this.props.alternativeTerms],
                 image: this.props.base64,
-                imageTags: [
-                  {
-                    text: 'corosion',
-                    pos: {
-                      x: 50,
-                      y: 30,
-                    },
-                  },
-                  {
-                    text: 'cracks',
-                    pos: {
-                      x: 40,
-                      y: 70,
-                    },
-                  },
-                ],
+                imageTags: [],
               }),
             })
               .then(response => response.json())
-              .then(console.log)
+              .then(response => {
+                this.setState({
+                  sending: false,
+                })
+                alert(
+                  "Call here `this.props.addPost` and fix reducer! I don't know how to use options arghh!! ",
+                )
+                // this.props.addPost(response)
+                //this.props.navigation.navigate('Explore')
+              })
           }}
         />
       </View>

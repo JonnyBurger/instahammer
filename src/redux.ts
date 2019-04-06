@@ -22,6 +22,7 @@ export enum Actions {
   FETCH_POSTS_REQUEST = 'FETCH_POSTS_REQUEST',
   FETCH_POSTS_FAILURE = 'FETCH_POSTS_FAILURE',
   FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS',
+  POST_ADDED = 'POST_ADDED',
   LOGOUT = 'LOGOUT',
   SET_NAME = 'SET_NAME',
   SET_AUTH_CHECKED = 'SET_AUTH_CHECKED',
@@ -97,6 +98,11 @@ export type LoginSuccess = {
 export type FetchPostsSuccess = {
   type: Actions.FETCH_POSTS_SUCCESS
   payload: Post[]
+}
+
+export type PostAdded = {
+  type: Actions.POST_ADDED
+  payload: Post
 }
 
 export const fetchPosts = () =>
@@ -245,6 +251,11 @@ export const dataReducer = (
       return {
         ...state,
         posts: some(action.payload),
+      }
+    case Actions.POST_ADDED:
+      return {
+        ...state,
+        posts: [action.post, ...state.posts],
       }
     default:
       return state
