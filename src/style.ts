@@ -23,3 +23,10 @@ export const headerStyle = {
   },
   headerTintColor: 'white',
 }
+
+export const shadow = {
+  shadowOffset: { width: 1, height: 2 },
+  shadowColor: '#505050',
+  shadowOpacity: 0.2,
+  shadowRadius: 4,
+}

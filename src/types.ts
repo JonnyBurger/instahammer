@@ -22,4 +22,5 @@ export type Post = {
   createdAt: number
   postTags: PostTag[]
   image: string
+  isResolved: boolean
 }

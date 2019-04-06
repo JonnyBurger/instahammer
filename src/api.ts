@@ -22,18 +22,21 @@ const makeApiRequest = async ({
   headers?: any
   formData?: any
   hasCredentials?: boolean
-}) =>
-  axios({
+}) => {
+  const config = {
     headers: headers || {
       'Content-Type': 'application/json',
     },
     method,
     url: endpoint.startsWith('https')
       ? endpoint
-      : `${Config!.SERVER}/api${endpoint}`,
+      : `${Config!.SERVER}${endpoint}`,
     data: JSON.stringify(body),
     withCredentials: hasCredentials ? 'include' : 'omit',
-  } as any)
+  } as any
+
+  return axios(config)
+}
 
 type ApiType = {
   request: string
@@ -77,8 +80,6 @@ export const callApi = ({
     hasCredentials,
   })
 
-  // console.log(json)
-
   if (json.status !== 200) {
     const failureAction = { type: type.failure, payload: json, meta }
     if (dispatch) {
@@ -87,7 +88,7 @@ export const callApi = ({
     return failureAction
   }
 
-  const successAction = { type: type.success, payload: json, meta }
+  const successAction = { type: type.success, payload: json.data, meta }
   if (dispatch) {
     dispatch(successAction)
   }

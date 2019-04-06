@@ -6,7 +6,7 @@ import { AsyncStorage } from 'react-native'
 import { AUTH_DATA_PATH } from './constants'
 
 function* handleLoginParsing(action: LoginSuccess) {
-  const $ = cheerio.load(action.payload.data)
+  const $ = cheerio.load(action.payload)
   const e = ($('.my-homepage__username').text() || '').trim()
 
   if (e) {

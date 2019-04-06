@@ -6,21 +6,40 @@ import {
   FlatList,
   ActivityIndicator,
   Button,
+  TextInput,
 } from 'react-native'
 import styled from 'styled-components'
 
 import { headerStyle } from './style'
 import { IconButton } from './IconButton'
 import { SULZER, BACKGROUND } from './colors'
-import { AppState, selectPosts } from './redux'
+import {
+  AppState,
+  selectFilteredPosts,
+  setSelectedPost,
+  setSearchText,
+} from './redux'
 import { connect } from 'react-redux'
-import { Post } from './types'
+import { Post as PostType } from './types'
 import { Option, none } from 'fp-ts/lib/Option'
+import { Post } from './Post'
+import { debounce } from './util'
 
 const Container = styled(View)`
   flex: 1;
   background-color: ${BACKGROUND};
   width: 100%;
+  padding: 8px 16px;
+`
+
+const SearchInput = styled(TextInput)`
+  width: 100%;
+  border-radius: 16px;
+  height: 32px;
+  background-color: #e8e8e8;
+  margin: 8px 0 12px 0;
+  font-size: 16px;
+  padding: 0 16px;
 `
 
 const LoadingWrapper = styled(View)`
@@ -29,18 +48,17 @@ const LoadingWrapper = styled(View)`
   justify-content: center;
 `
 
-const PostItem = styled(View)`
-  margin: 16px 0;
-`
-
-const PostTitle = styled(Text)`
-  font-size: 18px;
+const SearchWrapper = styled(View)`
+  padding: 0 8px;
 `
 
 type Props = {
-  posts: Option<Post[]>
+  posts: Option<PostType[]>
   login: (props: { username: string; password: string }) => void
   logout: () => void
+  navigation: any
+  setSelectedPost: (id: string) => void
+  setSearchText: (id: string) => void
 }
 
 class Explore extends React.Component<Props> {
@@ -50,8 +68,9 @@ class Explore extends React.Component<Props> {
       title: 'Explore',
       headerLeft: (
         <IconButton
-          source={require('./info.png')}
+          source={require('../assets/hardhat.png')}
           onPress={() => props.navigation.openDrawer()}
+          iconStyle={{ width: 28, height: 28 }}
         />
       ),
       headerRight: (
@@ -63,10 +82,14 @@ class Explore extends React.Component<Props> {
     }
   }
 
-  renderPostItem = (post: Post) => (
-    <PostItem key={post.id}>
-      <PostTitle>{post.title}</PostTitle>
-    </PostItem>
+  renderPostItem = (post: PostType) => (
+    <Post
+      post={post}
+      selectPost={(id: string) => {
+        this.props.setSelectedPost(id)
+        this.props.navigation.navigate('PostDetail')
+      }}
+    />
   )
 
   render() {
@@ -74,6 +97,12 @@ class Explore extends React.Component<Props> {
     return (
       <Container>
         <StatusBar barStyle="light-content" />
+        <SearchWrapper>
+          <SearchInput
+            placeholder="Search..."
+            onChangeText={debounce(this.props.setSearchText, 500)}
+          />
+        </SearchWrapper>
         {posts.fold(
           <LoadingWrapper>
             <ActivityIndicator size="large" />
@@ -91,8 +120,11 @@ class Explore extends React.Component<Props> {
   }
 }
 
-const Connected = connect((state: AppState) => ({
-  posts: selectPosts(state),
-}))(Explore)
+const Connected = connect(
+  (state: AppState) => ({
+    posts: selectFilteredPosts(state),
+  }),
+  { setSelectedPost, setSearchText },
+)(Explore)
 
 export { Connected as Explore }

@@ -15,6 +15,8 @@ const Icon = styled(Image)<{
 }>`
   width: 20px;
   height: 20px;
+
+  ${props => props.css};
 `
 
 export type IconButtonProps = {
