@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, Animated, Easing, ActivityIndicator} from 'react-native';
+import {View, Text, Animated, Easing, Image} from 'react-native';
+import {darken, lighten} from 'polished';
 import styled from 'styled-components';
 import {LinearGradient} from 'expo';
 import {format} from 'date-fns';
@@ -9,7 +10,7 @@ import {SULZER} from './colors';
 const Title = styled(Text)``;
 
 const IconContainer = styled(LinearGradient).attrs({
-	colors: [SULZER, '#5191f7'],
+	colors: [SULZER, lighten(0.2, SULZER)],
 	start: [0, 1],
 	end: [1, 1]
 })`
@@ -35,7 +36,7 @@ export class LitIcon extends React.Component<{
 				easing: Easing.in(Easing.ease),
 				useNativeDriver: true
 			}).start();
-		}, 1000 + this.props.delay);
+		}, 100);
 	}
 	render() {
 		return (
@@ -68,21 +69,33 @@ export class LitAnimation extends React.Component<{
 	delay: number;
 	type: 'time' | 'location';
 }> {
+	state = {
+		loaded: false
+	};
 	animation = new Animated.Value(0);
 	componentDidMount() {
 		setTimeout(() => {
+			this.setState({
+				loaded: true
+			});
 			Animated.timing(this.animation, {
 				toValue: 1,
 				duration: 200,
 				easing: Easing.ease
 			}).start();
-		}, 1200 + this.props.delay);
+		}, this.props.delay);
 	}
 
 	render() {
 		return (
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
-				<LitIcon delay={this.props.delay} type={this.props.type} />
+				{this.state.loaded ? (
+					<LitIcon delay={this.props.delay} type={this.props.type} />
+				) : (
+					<View style={{padding: 6}}>
+						<Rotating />
+					</View>
+				)}
 				<View style={{width: 7}} />
 				<Animated.Text
 					style={{
@@ -120,6 +133,38 @@ export class LitAnimation extends React.Component<{
 					)}
 				</Animated.Text>
 			</View>
+		);
+	}
+}
+
+export class Rotating extends React.Component {
+	rotation = new Animated.Value(0);
+	componentDidMount() {
+		Animated.loop(
+			Animated.timing(this.rotation, {
+				toValue: 1,
+				duration: 1500,
+				easing: Easing.linear
+			})
+		).start();
+	}
+	render() {
+		return (
+			<Animated.Image
+				source={require('../assets/spinner.png')}
+				style={{
+					height: 20,
+					width: 20,
+					transform: [
+						{
+							rotate: this.rotation.interpolate({
+								inputRange: [0, 1],
+								outputRange: ['0deg', '360deg']
+							})
+						}
+					]
+				}}
+			/>
 		);
 	}
 }

@@ -24,10 +24,7 @@ export default class extends React.Component {
 		return (
 			<View style={{flex: 1}}>
 				<StatusBar backgroundColor="white" barStyle="light-content" />
-				{/**
 				<Camera />
-				*/}
-				<Form />
 			</View>
 		);
 	}

@@ -16,12 +16,13 @@ import SnapButton from './SnapButton';
 import {FocalPoint} from './FocalPoint';
 import {Flash} from './Flash';
 import {CancelButton} from './CancelButton';
+import {Form} from './Form';
 
 const {height, width} = Dimensions.get('window');
 
 const screenHeight = height - 100;
 const aspectRatio = height / width;
-const previewHeight = 200;
+const previewHeight = 150;
 const padding = 30;
 const thumbnailHeight = previewHeight - padding;
 
@@ -50,9 +51,17 @@ class CameraView extends React.Component {
 				<View
 					style={{
 						height: screenHeight - previewHeight,
-						backgroundColor: 'white'
+						width: '100%'
 					}}
-				/>
+				>
+					{this.state.resultLoaded ? (
+						<View style={{flex: 1}}>
+							<Form />
+						</View>
+					) : (
+						<ActivityIndicator color="gray" />
+					)}
+				</View>
 			</TouchableWithoutFeedback>
 		);
 	};
@@ -81,13 +90,6 @@ class CameraView extends React.Component {
 					>
 						<CancelButton />
 					</TouchableOpacity>
-					{this.state.resultLoaded ? (
-						<View style={{flexDirection: 'row'}}>
-							<View style={{width: padding / 2}} />
-						</View>
-					) : (
-						<ActivityIndicator color="gray" />
-					)}
 				</View>
 			</TouchableWithoutFeedback>
 		);
