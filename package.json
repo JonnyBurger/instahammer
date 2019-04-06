@@ -20,6 +20,7 @@
     "fp-ts": "1.15.1",
     "jssoup": "0.0.10",
     "node-fetch": "2.3.0",
+    "polished": "3.2.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-cheerio": "1.0.0-rc.4",
