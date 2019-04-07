@@ -4,9 +4,6 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  TouchableOpacity,
-  ActivityIndicator,
-  Text,
   Alert,
   TouchableWithoutFeedback,
 } from 'react-native'
@@ -26,10 +23,8 @@ const { height, width } = Dimensions.get('window')
 
 const screenHeight = height - 100
 export const fillRatio = screenHeight / height
-const aspectRatio = height / width
 const previewHeight = 130
 const padding = 30
-const thumbnailHeight = previewHeight - padding
 
 let lastPosition = null
 

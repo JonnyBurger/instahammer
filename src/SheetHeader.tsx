@@ -1,19 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import {
-  View,
-  Text,
-  Image,
-  Animated,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import { Rotating } from './LitAnimation'
 import { LeftToRightReveal } from './LeftToRightReveal'
 import { Button } from './Button'
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
 import { GRAY } from './colors'
-import { FadingAvatar } from './FadingAvatar'
 import Reanimated from 'react-native-reanimated'
 import { Experts } from './Experts'
 
