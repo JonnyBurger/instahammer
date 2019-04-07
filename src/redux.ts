@@ -255,8 +255,8 @@ export const dataReducer = (
     case Actions.POST_ADDED:
       return {
         ...state,
-        posts: state.posts.fold(some([action.payload]), posts =>
-          some([...posts, action.payload]),
+        posts: state.posts.fold(some([action.post]), posts =>
+          some([action.post, ...posts]),
         ),
       }
     default:

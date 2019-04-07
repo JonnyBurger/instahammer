@@ -94,11 +94,11 @@ export class Form extends React.Component {
                 this.setState({
                   sending: false,
                 })
-                alert(
-                  "Call here `this.props.addPost` and fix reducer! I don't know how to use options arghh!! ",
-                )
-                // this.props.addPost(response)
-                //this.props.navigation.navigate('Explore')
+                // alert(
+                //   "Call here `this.props.addPost` and fix reducer! I don't know how to use options arghh!! ",
+                // )
+                this.props.addPost(response)
+                this.props.navigation.navigate('Explore')
               })
           }}
         />
