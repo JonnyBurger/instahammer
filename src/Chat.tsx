@@ -5,17 +5,26 @@ import {
   ScrollView,
   TextInput,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 
-import { AppState, selectPostComments, selectName } from './redux'
+import {
+  AppState,
+  selectPostComments,
+  selectName,
+  selectPostDetailId,
+  addComment,
+} from './redux'
 
 import { headerStyle, shadow } from './style'
 import { Avatar } from './Avatar'
 import { IconButton } from './IconButton'
 import { Comment } from './types'
 import { format } from 'date-fns'
+import { SULZER } from './colors'
+import { Option } from 'fp-ts/lib/Option'
 
 const ChatWrapper = styled(KeyboardAvoidingView)`
   border-radius: 8px;
@@ -44,11 +53,12 @@ const CommentWrapper = styled(View)`
 
 const CommentContent = styled(View)`
   margin-left: 8px;
+  min-width: 144px;
 `
 
 const CommentMeta = styled(View)`
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: ${props => (props.isMe ? 'flex-end' : 'space-between;')};
   margin-top: 4px;
 `
 
@@ -63,15 +73,16 @@ const CommentTime = styled(Text)`
 `
 
 const CommentTextWrapper = styled(View)`
-  background-color: #e8e8e8;
+  background-color: ${props => (props.isMe ? SULZER : '#e8e8e8')};
   border-radius: 8px;
   padding: 12px;
 `
 
-const CommentText = styled(Text)``
+const CommentText = styled(Text)`
+  color: ${props => (props.isMe ? 'white' : 'black')};
+`
 
 const AddCommentWrapper = styled(View)`
-  flex-basis: 72;
   flex-shrink: 0;
   width: 100%;
   background-color: #cfd7e2;
@@ -96,9 +107,14 @@ const CommentInput = styled(TextInput)`
 export type Props = {
   comments: Comment[]
   name: string
+  addComment: any
+  selectedPostId: Option<string>
 }
 
-class Chat extends React.Component<Props> {
+class Chat extends React.Component<Props, { show: boolean; text: string }> {
+  keyboardDidHideListener: any
+  keyboardDidShowListener: any
+  keyboardHeight = 0
   static navigationOptions = (props: any) => {
     return {
       ...headerStyle,
@@ -114,38 +130,97 @@ class Chat extends React.Component<Props> {
     }
   }
 
-  renderComment = (comment: Comment, key: number) => (
-    <CommentRow left={comment.author !== this.props.name} key={key}>
-      <CommentWrapper>
-        {comment.author !== this.props.name && <Avatar />}
-        <CommentContent>
-          <CommentTextWrapper>
-            <CommentText>{comment.text}</CommentText>
-          </CommentTextWrapper>
-          <CommentMeta>
-            <CommentAuthor>{comment.author}</CommentAuthor>
-            <CommentTime>
-              {format(new Date(comment.createdAt * 1000), 'hh:mm' as any)}
-            </CommentTime>
-          </CommentMeta>
-        </CommentContent>
-      </CommentWrapper>
-    </CommentRow>
-  )
+  messageChannel: any
+  constructor(props: Props) {
+    super(props)
+    this.messageChannel = React.createRef()
+
+    this.state = {
+      show: false,
+      text: '',
+    }
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.comments.length !== prevProps.comments.length) {
+      setTimeout(() => this.messageChannel.current.scrollToEnd(), 200)
+    }
+  }
+
+  componentDidMount() {
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      e => {
+        this.setState({ show: false })
+      },
+    )
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      e => {
+        if (this.keyboardHeight === 0) {
+          this.keyboardHeight = e.endCoordinates.height
+        }
+
+        this.setState({ show: true })
+      },
+    )
+  }
+
+  renderComment = (comment: Comment, key: number) => {
+    const isMe = comment.author === this.props.name
+
+    return (
+      <CommentRow left={!isMe} key={key}>
+        <CommentWrapper>
+          {!isMe && <Avatar />}
+          <CommentContent>
+            <CommentTextWrapper isMe={isMe}>
+              <CommentText isMe={isMe}>{comment.text}</CommentText>
+            </CommentTextWrapper>
+            <CommentMeta isMe={isMe}>
+              {!isMe && <CommentAuthor>{comment.author}</CommentAuthor>}
+              <CommentTime>
+                {format(new Date(comment.createdAt * 1000), 'hh:mm' as any)}
+              </CommentTime>
+            </CommentMeta>
+          </CommentContent>
+        </CommentWrapper>
+      </CommentRow>
+    )
+  }
 
   render() {
     const { comments } = this.props
     return (
       <ChatWrapper behavior="height">
-        <CommentsWrapper>
+        <CommentsWrapper
+          ref={this.messageChannel}
+          onContentSizeChange={() => {
+            this.messageChannel.current.scrollToEnd()
+          }}
+        >
           {comments.map(this.renderComment)}
           <EmptyRow />
         </CommentsWrapper>
-        <AddCommentWrapper>
+        <AddCommentWrapper
+          style={{
+            flexBasis: this.state.show ? 348 : 72,
+          }}
+        >
           <CommentInput
             style={shadow}
             placeholder="Respond here..."
             autoCorrect={false}
+            value={this.state.text}
+            onChangeText={t => this.setState({ text: t })}
+            onSubmitEditing={() => {
+              this.props.addComment(
+                this.state.text,
+                this.props.selectedPostId.getOrElse(''),
+                this.props.name,
+              )
+              this.setState({ text: '' })
+            }}
           />
         </AddCommentWrapper>
       </ChatWrapper>
@@ -153,9 +228,13 @@ class Chat extends React.Component<Props> {
   }
 }
 
-const Connected = connect((state: AppState) => ({
-  comments: selectPostComments(state),
-  name: selectName(state),
-}))(Chat)
+const Connected = connect(
+  (state: AppState) => ({
+    comments: selectPostComments(state),
+    name: selectName(state),
+    selectedPostId: selectPostDetailId(state),
+  }),
+  { addComment },
+)(Chat)
 
 export { Connected as Chat }

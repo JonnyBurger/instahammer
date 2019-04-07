@@ -34,7 +34,6 @@ const makeApiRequest = async ({
     data: JSON.stringify(body),
     withCredentials: hasCredentials ? 'include' : 'omit',
   } as any
-
   return axios(config)
 }
 
