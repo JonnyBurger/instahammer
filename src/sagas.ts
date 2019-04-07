@@ -6,22 +6,26 @@ import { AsyncStorage } from 'react-native'
 import { AUTH_DATA_PATH } from './constants'
 
 function* handleLoginParsing(action: LoginSuccess) {
-  const $ = cheerio.load(action.payload)
-  const e = ($('.my-homepage__username').text() || '').trim()
+  // const $ = cheerio.load(action.payload)
+  // const e = ($('.my-homepage__username').text() || '').trim()
 
-  if (e) {
-    yield put(setName(e))
-    AsyncStorage.setItem(AUTH_DATA_PATH, JSON.stringify(action.meta))
-  } else {
-    yield put({
-      type: Actions.LOGIN_FAILURE,
-    })
-  }
+  // if (e) {
+  //   yield put(setName(e))
+  //   AsyncStorage.setItem(AUTH_DATA_PATH, JSON.stringify(action.meta))
+  // } else {
+  //   yield put({
+  //     type: Actions.LOGIN_FAILURE,
+  //   })
+  // }
+
+  yield put(setName(action.meta.username))
+  AsyncStorage.setItem(AUTH_DATA_PATH, JSON.stringify(action.meta))
 }
 
 export function* LoginSaga() {
   yield takeEvery(
-    (a: Action) => a.type === Actions.LOGIN_SUCCESS,
+    (a: Action) =>
+      a.type === Actions.LOGIN_SUCCESS || a.type === Actions.LOGIN_FAILURE,
     handleLoginParsing,
   )
 }
