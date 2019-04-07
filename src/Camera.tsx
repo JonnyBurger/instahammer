@@ -72,6 +72,7 @@ class CameraView extends React.Component {
           <View style={{ flex: 1 }}>
             <Form
               addPost={this.props.addPost}
+              setSelectedPost={this.props.setSelectedPost}
               navigation={this.props.navigation}
               term={this.getResult().term}
               alternativeTerms={this.getResult().alternativeTerms}
@@ -199,7 +200,7 @@ class CameraView extends React.Component {
             ref={camera => {
               this.camera = camera
             }}
-            pictureSize="Medium"
+            pictureSize="High"
           >
             <View
               style={{
@@ -330,6 +331,11 @@ export default connect(
       dispatch({
         type: Actions.POST_ADDED,
         post,
+      }),
+    setSelectedPost: id =>
+      dispatch({
+        type: Actions.SET_SELECTED_POST,
+        payload: id,
       }),
   }),
 )(CameraView)
