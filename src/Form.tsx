@@ -31,9 +31,18 @@ export class Form extends React.Component {
     return (
       <View style={{ padding: 20, flex: 1 }}>
         <View style={{ height: 5 }} />
-        <Title placeholder="Enter title" value={this.state.title} />
+        <Title
+          placeholder="Enter title"
+          value={this.state.title}
+          onChangeText={title => {
+            this.setState({ title })
+          }}
+        />
         <View style={{ height: 10 }} />
         <Description
+          onChangeText={description => {
+            this.setState({ description })
+          }}
           value={this.state.description}
           placeholder={`Describe your inquiry about ${this.props.term}`}
         />
