@@ -105,6 +105,15 @@ class CameraView extends React.Component {
     if (this.state.resultLoaded.webTags.length > 2) {
       otherResult.push(this.state.resultLoaded.webTags[2])
     }
+    if (this.state.resultLoaded.webTags.length > 3) {
+      otherResult.push(this.state.resultLoaded.webTags[3])
+    }
+    if (this.state.resultLoaded.webTags.length > 4) {
+      otherResult.push(this.state.resultLoaded.webTags[4])
+    }
+    if (this.state.resultLoaded.webTags.length > 5) {
+      otherResult.push(this.state.resultLoaded.webTags[5])
+    }
     const term = this.state.selectedTerm || mainResult
     const alternativeTerms =
       !this.state.selectedTerm || this.state.selectedTerm === mainResult
@@ -112,7 +121,7 @@ class CameraView extends React.Component {
         : [mainResult, ...otherResult]
     return {
       mainResult,
-      alternativeTerms,
+      alternativeTerms: alternativeTerms.filter(Boolean),
       term,
     }
   }

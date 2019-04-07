@@ -100,6 +100,8 @@ export class Form extends React.Component {
               .then(response => {
                 this.setState({
                   sending: false,
+                  title: '',
+                  description: '',
                 })
                 // alert(
                 //   "Call here `this.props.addPost` and fix reducer! I don't know how to use options arghh!! ",
