@@ -113,6 +113,7 @@ const PostImageWrapper = styled(View)`
 const PostImage = styled(Image)`
   width: 100%;
   height: 312px;
+  background-color: rgba(0, 0, 0, 0.2);
 `
 
 const Spacer = styled(View)`

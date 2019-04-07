@@ -77,12 +77,14 @@ class Explore extends React.Component<Props> {
           source={require('../assets/hardhat.png')}
           onPress={() => props.navigation.openDrawer()}
           iconStyle={{ width: 28, height: 28 }}
+          left
         />
       ),
       headerRight: (
         <IconButton
           source={require('./plus.png')}
           onPress={() => props.navigation.navigate('CameraNavigator')}
+          right
         />
       ),
     }

@@ -6,7 +6,8 @@ const IconButtonWrapper = styled(TouchableOpacity)<{
   css: SimpleInterpolation
 }>`
   padding: 8px;
-
+  padding-left: ${props => (props.left ? 0 : 8)}px
+  padding-right: ${props => (props.right ? 0 : 8)}px
   ${props => props.css};
 `
 
@@ -30,9 +31,18 @@ export type IconButtonProps = {
 
 export class IconButton extends React.Component<IconButtonProps> {
   render() {
-    const { onPress, source, css, chromeless, rotate, iconStyle } = this.props
+    const {
+      onPress,
+      source,
+      css,
+      chromeless,
+      rotate,
+      iconStyle,
+      left,
+      right,
+    } = this.props
     return (
-      <IconButtonWrapper onPress={onPress} css={css}>
+      <IconButtonWrapper onPress={onPress} css={css} left={left} right={right}>
         <Icon
           source={source}
           css={iconStyle}
