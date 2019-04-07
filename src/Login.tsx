@@ -105,8 +105,8 @@ class Login extends React.Component<
           <Button
             onPress={() =>
               this.props.login({
-                username: 'lukaszirngibl',
-                password: 'EiBd89zukn?',
+                username: this.state.username, // 'lukaszirngibl',
+                password: this.state.password, // 'EiBd89zukn?',
               })
             }
             label="Login"
