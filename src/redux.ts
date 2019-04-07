@@ -28,6 +28,9 @@ export enum Actions {
   SET_AUTH_CHECKED = 'SET_AUTH_CHECKED',
   SET_SELECTED_POST = 'SET_SELECTED_POST',
   SET_SEARCH_TEXT = 'SET_SEARCH_TEXT',
+  ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST',
+  ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS',
+  ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE',
 }
 
 type SetSearchText = {
@@ -104,6 +107,36 @@ export type PostAdded = {
   type: Actions.POST_ADDED
   payload: Post
 }
+
+export type AddCommentSuccess = {
+  type: Actions.ADD_COMMENT_SUCCESS
+  meta: {
+    text: string
+    postId: string
+    author: string
+  }
+}
+
+export const addComment = (text: string, postId: string, author: string) =>
+  callApi({
+    type: {
+      request: Actions.ADD_COMMENT_REQUEST,
+      success: Actions.ADD_COMMENT_SUCCESS,
+      failure: Actions.ADD_COMMENT_FAILURE,
+    },
+    method: 'POST',
+    body: {
+      text,
+      postId,
+      author,
+    },
+    meta: {
+      text,
+      postId,
+      author,
+    },
+    endpoint: '/v1/comments',
+  })
 
 export const fetchPosts = () =>
   callApi({
@@ -247,6 +280,28 @@ export const dataReducer = (
   action: DataAction,
 ): DataState => {
   switch (action.type) {
+    case Actions.ADD_COMMENT_SUCCESS:
+      return {
+        ...state,
+        posts: state.posts.map(posts =>
+          posts.map(post => {
+            if (post.id === action.meta.postId) {
+              return {
+                ...post,
+                comments: [
+                  {
+                    ...action.meta,
+                    createdAt: new Date().getTime(),
+                    id: 'new',
+                  },
+                  ...post.comments,
+                ],
+              }
+            }
+            return post
+          }),
+        ),
+      }
     case Actions.FETCH_POSTS_SUCCESS:
       return {
         ...state,
