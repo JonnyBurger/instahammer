@@ -105,7 +105,8 @@ export class Form extends React.Component {
                 //   "Call here `this.props.addPost` and fix reducer! I don't know how to use options arghh!! ",
                 // )
                 this.props.addPost(response)
-                this.props.navigation.navigate('Explore')
+                this.props.setSelectedPost(response.id)
+                this.props.navigation.navigate('PostDetail')
               })
           }}
         />
