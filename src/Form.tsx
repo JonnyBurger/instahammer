@@ -1,11 +1,9 @@
 import React from 'react'
 import { View, TextInput } from 'react-native'
 import styled from 'styled-components'
-import { SULZER } from './colors'
-import { LitAnimation, Rotating } from './LitAnimation'
+import { LitAnimation } from './LitAnimation'
 import { Button } from './Button'
 import { Suggestions } from './Suggestions'
-import { withNavigation } from 'react-navigation'
 
 const Title = styled(TextInput)`
   font-size: 30px;
