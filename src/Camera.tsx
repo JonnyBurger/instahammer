@@ -302,7 +302,7 @@ class CameraView extends React.Component {
                     {
                       text: 'Yes',
                       onPress: () => {
-                        this.setState({ image: null })
+                        this.setState({ image: null, selectedTerm: null })
                       },
                     },
                   ]

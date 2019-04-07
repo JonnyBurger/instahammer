@@ -91,7 +91,7 @@ export class SheetHeader extends React.Component {
           >
             <Text>Or:</Text>
             <View style={{ width: 8 }} />
-            {this.props.alternativeTerms.slice(0, 2).map(r => (
+            {this.props.alternativeTerms.map(r => (
               <Tag
                 key={r}
                 onPress={() => {
