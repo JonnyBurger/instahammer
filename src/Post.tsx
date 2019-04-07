@@ -29,7 +29,7 @@ const PostHeader = styled(View)`
 `
 
 const PostTitle = styled(Text)`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin-left: 4px;
 `
