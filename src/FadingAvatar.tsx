@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Animated } from 'react-native'
+import { Animated } from 'react-native'
 
 export class FadingAvatar extends React.Component {
   anim = new Animated.Value(0)

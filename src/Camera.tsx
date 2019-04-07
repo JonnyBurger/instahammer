@@ -4,9 +4,6 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  TouchableOpacity,
-  ActivityIndicator,
-  Text,
   Alert,
   TouchableWithoutFeedback,
 } from 'react-native'
@@ -26,10 +23,8 @@ const { height, width } = Dimensions.get('window')
 
 const screenHeight = height - 100
 export const fillRatio = screenHeight / height
-const aspectRatio = height / width
 const previewHeight = 130
 const padding = 30
-const thumbnailHeight = previewHeight - padding
 
 let lastPosition = null
 
@@ -57,8 +52,8 @@ class CameraView extends React.Component {
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
     this.setState({ hasCameraPermission: status === 'granted' })
+    console.log(await this.camera.getAvailablePictureSizesAsync())
   }
-  ref: React.Ref<Results> | null = null
   flash: React.Ref<Flash> | null = null
   camera: React.Ref<Camera> | null = null
   contentPosition = new Animated.Value(0)
@@ -204,6 +199,7 @@ class CameraView extends React.Component {
             ref={camera => {
               this.camera = camera
             }}
+            pictureSize="Medium"
           >
             <View
               style={{

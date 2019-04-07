@@ -1,13 +1,11 @@
 import React from 'react'
-import { View, Text, Animated, Easing, Image } from 'react-native'
-import { darken, lighten } from 'polished'
+import { View, Text, Animated, Easing } from 'react-native'
+import { lighten } from 'polished'
 import styled from 'styled-components'
 import { LinearGradient } from 'expo'
 import { format } from 'date-fns'
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
 import { SULZER } from './colors'
-
-const Title = styled(Text)``
 
 const IconContainer = styled(LinearGradient).attrs({
   colors: [SULZER, lighten(0.2, SULZER)],

@@ -29,20 +29,18 @@ const Container = styled(View)`
   flex: 1;
   background-color: ${BACKGROUND};
   width: 100%;
-  padding: 8px 0;
 `
 
 const PostsWrapper = styled(View)`
   width: 100%;
-  padding: 0 16px;
 `
 
 const SearchInput = styled(TextInput)`
   width: 100%;
-  border-radius: 16px;
-  height: 32px;
-  background-color: #e8e8e8;
-  margin: 8px 0 12px 0;
+  border-radius: 8px;
+  height: 36px;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin: 8px 0 8px 0;
   font-size: 16px;
   padding: 0 16px;
 `
@@ -54,7 +52,10 @@ const LoadingWrapper = styled(View)`
 `
 
 const SearchWrapper = styled(View)`
-  padding: 0 8px;
+  padding: 0 20px;
+  background: rgba(0, 0, 0, 0.03);
+  border-bottom-color: rgba(0, 0, 0, 0.05);
+  border-bottom-width: 1px;
 `
 
 type Props = {
@@ -115,7 +116,7 @@ class Explore extends React.Component<Props> {
             </LoadingWrapper>,
             p => (
               <FlatList
-                data={p.reverse()}
+                data={p}
                 keyExtractor={(item, index) => String(index)}
                 renderItem={({ item }) => this.renderPostItem(item)}
               />

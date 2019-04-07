@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { View, Text, Dimensions } from 'react-native'
+import { Text, Dimensions } from 'react-native'
 import Animated, { Easing } from 'react-native-reanimated'
 import { LinearGradient } from 'expo'
 

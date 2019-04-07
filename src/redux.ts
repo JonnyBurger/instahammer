@@ -10,7 +10,7 @@ import { callApi } from './api'
 import createSagaMiddleware from 'redux-saga'
 import { MainSaga } from './sagas'
 import { liftA2 } from 'fp-ts/lib/Apply'
-import { findFirst, sort, snoc } from 'fp-ts/lib/Array'
+import { findFirst, sort } from 'fp-ts/lib/Array'
 import { Ord } from 'fp-ts/lib/Ord'
 
 // Actions
@@ -311,7 +311,7 @@ export const dataReducer = (
       return {
         ...state,
         posts: state.posts.fold(some([action.post]), posts =>
-          some([action.post, ...posts]),
+          some([...posts, action.post]),
         ),
       }
     default:

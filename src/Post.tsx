@@ -11,7 +11,10 @@ import { Status } from './Status'
 const PostWrapper = styled(TouchableOpacity)`
   border-radius: 8px;
   background-color: white;
-  margin: 8px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 `
 
 const PostHeader = styled(View)`
