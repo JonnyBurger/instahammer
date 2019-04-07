@@ -256,7 +256,7 @@ export const dataReducer = (
       return {
         ...state,
         posts: state.posts.fold(some([action.post]), posts =>
-          some([action.post, ...posts]),
+          some([...posts, action.post]),
         ),
       }
     default:

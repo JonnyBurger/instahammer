@@ -62,7 +62,7 @@ const ReporterWrapper = styled(View)`
 const ReputationScore = styled(View)`
   flex-direction: row;
   padding: 4px 8px;
-  border-radius: 12px;
+  border-radius: 8px;
   background-color: #f0f0f0;
   margin-left: 12px;
 `
