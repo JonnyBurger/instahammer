@@ -14,6 +14,7 @@ export const DataAsync = (WrappedComponent: any) => {
   class UnconnectedWrapped extends React.Component<Props> {
     componentWillMount() {
       this.props.fetchPosts()
+      setInterval(this.props.fetchPosts, 5000)
     }
 
     render() {
