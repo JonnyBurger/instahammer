@@ -319,6 +319,11 @@ export const selectPosts = createSelector(
   data => data.posts,
 )
 
+const postSetoid: Ord<Post> = {
+  compare: (a, b) => (a.createdAt < b.createdAt ? 1 : -1),
+  equals: (a, b) => a.createdAt < b.createdAt,
+}
+
 export const selectFilteredPosts = createSelector(
   selectPosts,
   selectSearchText,
@@ -326,11 +331,13 @@ export const selectFilteredPosts = createSelector(
     searchText === ''
       ? postsOption
       : postsOption.map(posts =>
-          posts.filter(
-            p =>
-              p.title
-                .toLocaleLowerCase()
-                .indexOf(searchText.toLocaleLowerCase()) !== -1,
+          sort<Post>(postSetoid)(
+            posts.filter(
+              p =>
+                p.title
+                  .toLocaleLowerCase()
+                  .indexOf(searchText.toLocaleLowerCase()) !== -1,
+            ),
           ),
         ),
 )

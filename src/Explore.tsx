@@ -115,7 +115,7 @@ class Explore extends React.Component<Props> {
             </LoadingWrapper>,
             p => (
               <FlatList
-                data={p}
+                data={p.reverse()}
                 keyExtractor={(item, index) => String(index)}
                 renderItem={({ item }) => this.renderPostItem(item)}
               />
