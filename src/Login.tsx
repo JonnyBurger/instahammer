@@ -97,11 +97,10 @@ class Login extends React.Component<
           <LoginLabel
             onChangeText={e => this.setState({ password: e })}
             value={this.state.password}
-            secureTextEntry
           >
             Password
           </LoginLabel>
-          <LoginInput />
+          <LoginInput secureTextEntry />
           <Button
             onPress={() =>
               this.props.login({
