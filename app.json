@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "instahammer",
+    "name": "HammerTime",
     "slug": "instahammer",
     "privacy": "public",
     "sdkVersion": "32.0.0",
@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "hammertime.instahammer",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     }
   }
 }

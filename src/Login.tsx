@@ -88,16 +88,10 @@ class Login extends React.Component<
         <StatusBar barStyle="light-content" />
         <Content>
           <AppLogo source={require('./hammer.png')} />
-          <SulzerLogo source={require('./sulzer.png')} />
-          <LoginLabel>Username</LoginLabel>
+          <LoginLabel>Choose a username</LoginLabel>
           <LoginInput
             onChangeText={e => this.setState({ username: e })}
             value={this.state.username}
-          />
-          <LoginLabel value={this.state.password}>Password</LoginLabel>
-          <LoginInput
-            secureTextEntry
-            onChangeText={e => this.setState({ password: e })}
           />
           <Button
             onPress={() =>
